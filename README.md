@@ -60,15 +60,15 @@ Same stack throughout: Tauri (Rust) + the OS's native webview (WebKitGTK on Linu
 ```bash
 git clone https://github.com/Hugofsp93/alkahest.git
 cd alkahest
-npm install
-npm run tauri dev
+bun install
+bun run tauri dev
 ```
 
 ### Build from source
 
 ```bash
-npm install
-npx tauri build
+bun install
+bunx tauri build
 ```
 
 First build takes 5–10 minutes (Rust compile time). No pre-built binaries are distributed.
