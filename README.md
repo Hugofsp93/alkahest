@@ -2,9 +2,11 @@
 
 **A lean, opinionated VS Code fork — built to be read, not just run.**
 
-<img src="https://img.shields.io/badge/status-work_in_progress-orange?style=for-the-badge" alt="Work in progress">
-<a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge" alt="MIT License"></a>
-<img src="https://img.shields.io/badge/built_with-Tauri_2-FFC131?style=for-the-badge&logo=tauri&logoColor=white" alt="Built with Tauri">
+<p>
+  <img src="https://img.shields.io/badge/status-work_in_progress-orange?style=for-the-badge" alt="Work in progress">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge" alt="MIT License"></a>
+  <img src="https://img.shields.io/badge/built_with-Tauri_2-FFC131?style=for-the-badge&logo=tauri&logoColor=white" alt="Built with Tauri">
+</p>
 
 ---
 
