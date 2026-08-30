@@ -499,12 +499,9 @@ pub fn run() {
                 )?;
             }
 
-            #[allow(unexpected_cfgs)]
-            {
-                #[cfg(feature = "devtools")]
-                if let Some(window) = app.get_webview_window("main") {
-                    window.open_devtools();
-                }
+            #[cfg(debug_assertions)]
+            if let Some(window) = app.get_webview_window("main") {
+                window.open_devtools();
             }
 
             Ok(())
