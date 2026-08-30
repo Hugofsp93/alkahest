@@ -50,7 +50,7 @@ import {
 import type { IGrammar, IOnigLib, IRawTheme } from 'vscode-textmate';
 import { IFontTokenOptions } from '../../../../platform/theme/common/themeService.js';
 
-const isTauri = !!(globalThis as any).__SIDEX_TAURI__;
+const isTauri = !!(globalThis as any).__ALKAHEST_TAURI__;
 
 async function loadVscodeTextmate(): Promise<typeof import('vscode-textmate')> {
 	if (isTauri) {
@@ -119,10 +119,10 @@ export class TextMateTokenizationFeature extends Disposable implements ITextMate
 		this._styleElement = domStylesheets.createStyleSheet();
 		this._styleElement.className = 'vscode-tokens-styles';
 
-		this._logService.info('[SideX-TextMate] TextMateTokenizationFeature constructed');
+		this._logService.info('[Alkahest-TextMate] TextMateTokenizationFeature constructed');
 		grammarsExtPoint.setHandler(extensions => {
 			this._logService.info(
-				`[SideX-TextMate] grammarsExtPoint delivered ${extensions.length} extension(s) with grammars`
+				`[Alkahest-TextMate] grammarsExtPoint delivered ${extensions.length} extension(s) with grammars`
 			);
 			this._handleGrammarsExtPoint(extensions);
 		});

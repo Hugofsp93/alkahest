@@ -1,0 +1,13 @@
+[package]
+name = "alkahest-extension-sdk"
+version = "0.1.0"
+edition = "2021"
+description = "SDK for building native Alkahest extensions in Rust (WASM Component Model)"
+license = "MIT"
+repository = "https://github.com/Hugofsp93/alkahest"
+
+[dependencies]
+wit-bindgen = "0.41"
+
+[lib]
+crate-type = ["cdylib", "rlib"]

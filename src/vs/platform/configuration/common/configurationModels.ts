@@ -618,7 +618,7 @@ export class UserSettings extends Disposable {
 	}
 
 	async loadConfiguration(): Promise<ConfigurationModel> {
-		// Bridge to Rust sidex-settings: prefer the user-scope view from the
+		// Bridge to Rust alkahest-settings: prefer the user-scope view from the
 		// Rust store so the in-memory Rust state and the TS configuration
 		// model stay consistent. Falls back to direct file read if the Tauri
 		// command is unavailable (e.g. tests, isolated unit contexts).

@@ -253,7 +253,7 @@ pub fn task_list(state: State<'_, Arc<TaskProcessStore>>) -> Result<Vec<u32>, St
     Ok(tasks.keys().copied().collect())
 }
 
-// ── Auto-detection & tasks.json parsing via sidex-tasks ─────────────
+// ── Auto-detection & tasks.json parsing via alkahest-tasks ─────────────
 
 #[derive(Debug, Clone, Serialize)]
 pub struct DetectedTask {
@@ -273,7 +273,7 @@ pub struct TaskDefinition {
 }
 
 impl DetectedTask {
-    fn from_crate_task(t: &sidex_tasks::Task) -> Self {
+    fn from_crate_task(t: &alkahest_tasks::Task) -> Self {
         Self {
             label: t.name.clone(),
             task_type: format!("{:?}", t.task_type),
@@ -284,9 +284,9 @@ impl DetectedTask {
 }
 
 impl TaskDefinition {
-    fn from_crate_task(t: &sidex_tasks::Task) -> Self {
+    fn from_crate_task(t: &alkahest_tasks::Task) -> Self {
         let group = match t.group {
-            sidex_tasks::TaskGroup::None => None,
+            alkahest_tasks::TaskGroup::None => None,
             other => Some(format!("{other:?}").to_lowercase()),
         };
         Self {
@@ -308,9 +308,9 @@ pub fn tasks_detect(workspace: String) -> Result<Vec<DetectedTask>, String> {
     let mut all = Vec::new();
 
     for result in [
-        sidex_tasks::detect_npm_tasks(root),
-        sidex_tasks::detect_cargo_tasks(root),
-        sidex_tasks::detect_make_tasks(root),
+        alkahest_tasks::detect_npm_tasks(root),
+        alkahest_tasks::detect_cargo_tasks(root),
+        alkahest_tasks::detect_make_tasks(root),
     ] {
         match result {
             Ok(tasks) => all.extend(tasks.iter().map(DetectedTask::from_crate_task)),
@@ -331,6 +331,6 @@ pub fn tasks_parse_config(workspace: String) -> Result<Vec<TaskDefinition>, Stri
     if !tasks_path.exists() {
         return Ok(Vec::new());
     }
-    let tasks = sidex_tasks::parse_tasks_json(&tasks_path).map_err(|e| e.to_string())?;
+    let tasks = alkahest_tasks::parse_tasks_json(&tasks_path).map_err(|e| e.to_string())?;
     Ok(tasks.iter().map(TaskDefinition::from_crate_task).collect())
 }

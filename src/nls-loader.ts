@@ -1,6 +1,6 @@
 type Translations = Record<string, string>;
 
-const sidexTranslations: Record<string, Translations> = {
+const alkahestTranslations: Record<string, Translations> = {
 	'zh-cn': {
 		'remote.pick.placeholder': '选择一个选项来打开远程窗口',
 		'remote.pick.connectToTunnel': '连接到隧道…',
@@ -21,8 +21,8 @@ const sidexTranslations: Record<string, Translations> = {
 		'explorerViewlet.cloneRepository': '你可以在本地克隆一个仓库。\n{0}',
 		remoteExplorer: '远程资源管理器',
 		remoteExplorerViewIcon: '远程资源管理器视图图标。',
-		'sidex.remote.refresh': '刷新远程资源管理器',
-		'sidex.remote.openExplorer': '远程资源管理器',
+		'alkahest.remote.refresh': '刷新远程资源管理器',
+		'alkahest.remote.openExplorer': '远程资源管理器',
 		'remote.signInMicrosoft': '使用 Microsoft 登录',
 		'remote.signInGitHub': '使用 GitHub 登录',
 		'remote.ssh.noHosts': '未在 ~/.ssh/config 中找到 SSH 目标',
@@ -64,22 +64,22 @@ const sidexTranslations: Record<string, Translations> = {
 
 export async function loadNlsMessages(): Promise<void> {
 	const locale = localStorage.getItem('vscode.nls.locale');
-	console.log('[SideX NLS] locale from localStorage:', locale);
+	console.log('[Alkahest NLS] locale from localStorage:', locale);
 
 	if (!locale || locale.toLowerCase().startsWith('en')) {
 		return;
 	}
 
 	let extensionId = localStorage.getItem('vscode.nls.languagePackExtensionId');
-	console.log('[SideX NLS] extensionId from localStorage:', extensionId);
+	console.log('[Alkahest NLS] extensionId from localStorage:', extensionId);
 
 	if (!extensionId) {
 		extensionId = await detectInstalledLanguagePack(locale);
 		if (extensionId) {
 			localStorage.setItem('vscode.nls.languagePackExtensionId', extensionId);
-			console.log('[SideX NLS] auto-detected language pack:', extensionId);
+			console.log('[Alkahest NLS] auto-detected language pack:', extensionId);
 		} else {
-			console.warn('[SideX NLS] No language pack found for locale:', locale);
+			console.warn('[Alkahest NLS] No language pack found for locale:', locale);
 			return;
 		}
 	}
@@ -88,14 +88,14 @@ export async function loadNlsMessages(): Promise<void> {
 		const translations = (await loadFromDisk(extensionId)) ?? (await loadFromGallery(extensionId));
 
 		if (!translations) {
-			console.warn('[SideX NLS] No translations found for', extensionId);
+			console.warn('[Alkahest NLS] No translations found for', extensionId);
 			return;
 		}
 
-		// Merge SideX-specific translations for strings not in the VS Code language pack
-		const sidexExtra = sidexTranslations[locale.toLowerCase()];
-		if (sidexExtra) {
-			for (const [key, val] of Object.entries(sidexExtra)) {
+		// Merge Alkahest-specific translations for strings not in the VS Code language pack
+		const alkahestExtra = alkahestTranslations[locale.toLowerCase()];
+		if (alkahestExtra) {
+			for (const [key, val] of Object.entries(alkahestExtra)) {
 				if (!(key in translations)) {
 					translations[key] = val;
 				}
@@ -110,7 +110,7 @@ export async function loadNlsMessages(): Promise<void> {
 				if (nlsEntries.length > 0) {
 					(globalThis as any)._VSCODE_NLS_MESSAGES = nlsEntries.map(({ key, msg }) => translations[key] ?? msg);
 					(globalThis as any)._VSCODE_NLS_LANGUAGE = locale;
-					console.log(`[SideX NLS] Loaded ${nlsEntries.length} translations for ${locale} (indexed mode)`);
+					console.log(`[Alkahest NLS] Loaded ${nlsEntries.length} translations for ${locale} (indexed mode)`);
 					return;
 				}
 			}
@@ -118,9 +118,9 @@ export async function loadNlsMessages(): Promise<void> {
 
 		(globalThis as any)._VSCODE_NLS_TRANSLATIONS = translations;
 		(globalThis as any)._VSCODE_NLS_LANGUAGE = locale;
-		console.log(`[SideX NLS] Loaded ${Object.keys(translations).length} translations for ${locale} (key mode)`);
+		console.log(`[Alkahest NLS] Loaded ${Object.keys(translations).length} translations for ${locale} (key mode)`);
 	} catch (e) {
-		console.warn('[SideX NLS] Failed to load translations:', e);
+		console.warn('[Alkahest NLS] Failed to load translations:', e);
 	}
 }
 
@@ -136,11 +136,11 @@ async function loadFromDisk(extensionId: string): Promise<Translations | null> {
 			return null;
 		}
 
-		const path = `${homedir}/.sidex/extensions/${extensionId}/translations/main.i18n.json`;
+		const path = `${homedir}/.alkahest/extensions/${extensionId}/translations/main.i18n.json`;
 		const raw = await invoke<string>('read_file', { path });
 		const result = parseBundle(raw);
 		if (result) {
-			console.log(`[SideX NLS] Loaded translations from disk: ${path}`);
+			console.log(`[Alkahest NLS] Loaded translations from disk: ${path}`);
 		}
 		return result;
 	} catch {
@@ -170,7 +170,7 @@ async function loadFromGallery(extensionId: string): Promise<Translations | null
 			if (res.ok) {
 				const result = parseBundle(await res.text());
 				if (result) {
-					console.log(`[SideX NLS] Loaded translations from gallery`);
+					console.log(`[Alkahest NLS] Loaded translations from gallery`);
 					return result;
 				}
 			}
@@ -227,7 +227,7 @@ async function detectInstalledLanguagePack(locale: string): Promise<string | nul
 		if (!homedir) {
 			return null;
 		}
-		const path = `${homedir}/.sidex/extensions/${knownId}/translations/main.i18n.json`;
+		const path = `${homedir}/.alkahest/extensions/${knownId}/translations/main.i18n.json`;
 		await invoke<string>('read_file', { path });
 		return knownId;
 	} catch {

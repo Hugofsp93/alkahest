@@ -94,7 +94,7 @@ pub fn get_monitors(app: AppHandle) -> Result<Vec<MonitorInfo>, String> {
         .collect())
 }
 
-/// OS window frame geometry persisted in `sidex_storage.db` (`kv_store`).
+/// OS window frame geometry persisted in `alkahest_storage.db` (`kv_store`).
 ///
 /// Workbench layout (sidebar, panel, editor grid) is owned by VS Code storage
 /// (`workbench.*` / `editorpart.state` keys via `TauriStorageDatabase`). This
@@ -108,7 +108,7 @@ pub struct WindowState {
     pub maximized: bool,
 }
 
-const WINDOW_STATE_KEY: &str = "sidex.windowState";
+const WINDOW_STATE_KEY: &str = "alkahest.windowState";
 
 /// Restores native frame geometry before the workbench is shown.
 ///

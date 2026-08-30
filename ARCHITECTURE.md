@@ -1,13 +1,13 @@
-# SideX Architecture
+# Alkahest Architecture
 
-A technical reference for how SideX maps to VSCode's architecture.
+A technical reference for how Alkahest maps to VSCode's architecture.
 
 The VSCode source (MIT License) is the architectural reference. No proprietary code is used.
 
 ## Process Model
 
 ```
-VSCode (Electron)                    SideX (Tauri)
+VSCode (Electron)                    Alkahest (Tauri)
 ─────────────────                    ─────────────
 Electron Main Process        →       Tauri Rust Backend
   ├─ BrowserWindow           →       WebviewWindow
@@ -69,7 +69,7 @@ Extension Host               →       Sidecar process (in progress)
 | `os.*` | `sysinfo` (Rust) | Ported |
 | `@vscode/sqlite3` | `rusqlite` | Ported |
 | `@vscode/spdlog` | `tracing` + `tracing-subscriber` | Partial |
-| `autoUpdater` | `sidex-update` (native Rust) | Complete |
+| `autoUpdater` | `alkahest-update` (native Rust) | Complete |
 | `powerMonitor` | Rust system-info crates | Not started |
 | `contentTracing` | Rust tracing crate | Not started |
 | `native-keymap` | Rust keyboard crate | Not started |

@@ -1,5 +1,5 @@
 /*---------------------------------------------------------------------------------------------
- *  SideX Extension Host Bridge
+ *  Alkahest Extension Host Bridge
  *  Connects to the Node.js extension host via WebSocket and registers
  *  Monaco language feature providers that forward to loaded extensions.
  *--------------------------------------------------------------------------------------------*/
@@ -139,9 +139,9 @@ export class TauriExtensionHostBridge extends Disposable implements IWorkbenchCo
 			this._registerProviders(conn);
 			this._listenEvents(conn);
 
-			console.log('[SideX] Extension host bridge connected');
+			console.log('[Alkahest] Extension host bridge connected');
 		} catch (e) {
-			console.warn('[SideX] Extension host bridge failed:', e);
+			console.warn('[Alkahest] Extension host bridge failed:', e);
 		}
 	}
 

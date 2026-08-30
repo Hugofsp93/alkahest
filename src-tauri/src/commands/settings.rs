@@ -1,7 +1,7 @@
 use std::sync::{Arc, RwLock};
 
 use serde_json::Value;
-use sidex_settings::{modify_jsonc, parse_jsonc, Settings};
+use alkahest_settings::{modify_jsonc, parse_jsonc, Settings};
 use tauri::State;
 
 pub struct SettingsStore {
@@ -57,7 +57,7 @@ pub fn settings_get(
             let mut merged = serde_json::Map::new();
             // Collect all keys across layers via the builtin defaults as the
             // canonical key set, then overlay user/workspace via get_raw.
-            let defaults = sidex_settings::builtin_defaults();
+            let defaults = alkahest_settings::builtin_defaults();
             if let Some(obj) = defaults.as_object() {
                 for key in obj.keys() {
                     if let Some(val) = settings.get_raw(key) {

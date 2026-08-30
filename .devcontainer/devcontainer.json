@@ -1,5 +1,5 @@
 {
-  "name": "SideX Builder",
+  "name": "Alkahest Builder",
   "build": {
     "dockerfile": "Dockerfile"
   },

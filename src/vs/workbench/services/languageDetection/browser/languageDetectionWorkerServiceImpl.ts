@@ -1,5 +1,5 @@
 /*---------------------------------------------------------------------------------------------
- *  SideX — Language detection backed by the `sidex-syntax` Rust crate.
+ *  Alkahest — Language detection backed by the `alkahest-syntax` Rust crate.
  *
  *  VS Code's upstream implementation shells out to an ONNX Guesslang model in
  *  a web worker. We keep the same `ILanguageDetectionService` shape but let

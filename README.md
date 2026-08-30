@@ -1,174 +1,76 @@
-<h1 align="center">SideX</h1>
+# <img src="./docs/assets/icon.png" alt="" width="42" valign="middle"> Alkahest
 
-<p align="center">
-  <strong>VSCode's workbench, without Electron.</strong>
-</p>
+**A lean, opinionated VS Code fork — built to be read, not just run.**
 
-<p align="center">
-  <a href="https://discord.gg/8CUCnEAC4J"><img src="https://img.shields.io/badge/Discord-Join-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Discord"></a>
-  <a href="https://github.com/Sidenai/sidex/issues"><img src="https://img.shields.io/badge/Contributing-Welcome-brightgreen?style=for-the-badge" alt="Contributing"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="MIT License"></a>
-  <img src="https://img.shields.io/badge/Built_with-Tauri_2-FFC131?style=for-the-badge&logo=tauri&logoColor=white" alt="Built with Tauri">
-</p>
-
-<br>
-
-<p align="center">
-  <img src="./docs/assets/preview.jpg" alt="SideX — VSCode workbench running on Tauri" width="900">
-</p>
-
-<br>
-
-<p align="center">
-  <a href="#why">Why</a> · <a href="#whats-working">What's Working</a> · <a href="#getting-started">Getting Started</a> · <a href="#how-its-built">How It's Built</a> · <a href="#contributing">Contributing</a> · <a href="https://discord.gg/8CUCnEAC4J">Discord</a>
-</p>
+<img src="https://img.shields.io/badge/status-work_in_progress-orange?style=for-the-badge" alt="Work in progress">
+<a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge" alt="MIT License"></a>
+<img src="https://img.shields.io/badge/built_with-Tauri_2-FFC131?style=for-the-badge&logo=tauri&logoColor=white" alt="Built with Tauri">
 
 ---
 
-SideX is a port of Visual Studio Code that replaces Electron with [Tauri](https://tauri.app/) — a Rust backend and OS's native webview. The same TypeScript workbench, the same editor, terminal, and Git integration, running without a bundled browser.
+> **🚧 Work in progress.** Alkahest is a personal fork, actively being cut down from its upstream base. Nothing below is a promise about what exists in this repo *today* — it's the plan. See [Status](#status) for where things actually stand.
 
-> **Early release.** Core editing and the terminal are solid. The extension host and debugger are still in progress. See [What's Working](#whats-working) for the full picture.
+## What this is
 
----
+Alkahest is a fork of [SideX](https://github.com/Sidenai/sidex) — itself a port of Visual Studio Code that swaps Electron for [Tauri](https://tauri.app/) — trimmed down to only the features actually used day to day.
 
-## Why
+It's not a performance project. Removing panels doesn't meaningfully change RAM or startup time — the weight was always the webview and the workbench, and that doesn't go away by cutting features. The point is **less code to read, review, and maintain alone.** A solo portfolio project needs a small, understandable surface far more than it needs another FPS counter.
 
-VSCode's memory usage is almost entirely from its bundled Chromium, not the editor itself. Tauri replaces that with the webview already on your system — WKWebView on macOS, WebView2 on Windows — shared across apps and costing almost nothing extra.
+## Why fork instead of just configuring VS Code / VSCodium?
 
-<p align="center">
-  <img src="./docs/assets/compare.jpg" alt="SideX 16.4 MB vs Visual Studio Code 797.8 MB" width="760">
-</p>
+Because the current setup already *is* VSCodium plus a pile of `settings.json` tweaks and styling extensions layered on top — a debugger that's never opened, a marketplace for extensions only ever used for theming, Git panels for actions already done faster in a terminal. Folding what's actually used into the fork itself, as fixed defaults instead of configuration, means less surface area to carry around and re-set-up.
 
-RAM savings are most tested on macOS, WKWebView is shared with Safari. On Windows the picture is more nuanced — WebView2 memory can look higher depending on how it's measured, and [it's an active area in the Tauri ecosystem](https://github.com/tauri-apps/tauri/issues/5889). The target is **under 200 MB at idle** on macOS. We'll publish real benchmarks once the app is stable enough for them to be meaningful.
+## Scope
 
----
+**Stays:**
 
-## What's Working
+| Area | What it does |
+|---|---|
+| Explorer | Open a folder, create / rename / delete files |
+| Search | In-file and full-text search |
+| Editor | Monaco, with per-extension language detection and syntax highlighting — no IntelliSense beyond what the language grammar already provides |
+| Source Control | **Read-only** — status, diff, log. Seeing what changed, nothing more |
+| Theme & icons | One opinionated color theme, file-icon theme, and product icon, built into the fork — not configurable, not a marketplace extension |
 
-**Solid:**
+**Goes:**
 
-- Monaco editor with syntax highlighting and basic IntelliSense
-- File explorer — open folders, create, rename, delete
-- Integrated terminal — full PTY via Rust, shell detection, resize, signals
-- Git — status, diff, log, stage, commit, branch, push/pull/fetch, stash, reset
-- Themes — multiple built-in themes from the VSCode catalogue
-- Native OS menus (macOS, Windows, Linux)
-- Extension installation from [Open VSX](https://open-vsx.org/)
-- File watching, file search, full-text search, Rust-backed search index
-- SQLite storage, document management (autosave, undo/redo, encoding)
+- **Debugger** — never used; unfinished upstream anyway
+- **Full extension host / marketplace** — the only "extensions" in real use today are styling, and those become fixed parts of the fork instead of installable plugins
+- **Git write actions in the UI** — commit, push, pull, stash, branch, publish. Upstream's implementation is solid; this fork just doesn't surface it. Git stays a terminal tool
 
----
+**Not now, maybe later:**
+
+- Matching this theme to the OS shell theme (Omarchy / Hyprland) — separate idea, not evaluated yet
+- Zed/Lapce-style GPU rendering — out of scope for a fork; would be a rewrite, not an evolution of this one
+
+## Status
+
+Actively being cut down from the upstream checkout. Nothing is stripped yet — Explorer, Search, editor, full Source Control (including the write actions being removed), the extension host, and the debugger are all still present as inherited from upstream. Follow the commit history for what's actually landed.
+
+## Built on
+
+Alkahest → fork of [SideX](https://github.com/Sidenai/sidex) → a Tauri port of [Visual Studio Code](https://github.com/microsoft/vscode).
+
+Same stack throughout: Tauri (Rust) + the OS's native webview (WebKitGTK on Linux, WKWebView on macOS, WebView2 on Windows) + the VS Code TypeScript workbench.
 
 ## Getting Started
 
-### Run in Development
-
 ```bash
-git clone https://github.com/Sidenai/sidex.git
-cd sidex
+git clone https://github.com/Hugofsp93/alkahest.git
+cd alkahest
 npm install
 npm run tauri dev
 ```
 
-### Build from Source
+### Build from source
 
 ```bash
 npm install
-
-# macOS / Linux
-NODE_OPTIONS="--max-old-space-size=12288" npm run build
-
-# Windows (PowerShell)
-$env:NODE_OPTIONS="--max-old-space-size=12288"
-npm run build
-
 npx tauri build
 ```
 
-First build takes 5–10 minutes (Rust compile time). Pre-built binaries are not distributed yet.
-
----
-
-## How It's Built
-
-SideX maps VSCode's Electron architecture onto Tauri layer by layer:
-
-| VSCode (Electron) | SideX (Tauri) |
-|---|---|
-| Electron main process | Tauri Rust backend |
-| `BrowserWindow` | `WebviewWindow` |
-| `ipcMain` / `ipcRenderer` | `invoke()` + Tauri events |
-| Node.js `fs`, `pty`, etc. | Rust commands (`std::fs`, `portable-pty`) |
-| Menu / Dialog / Clipboard | Tauri plugins |
-| Renderer (DOM + TypeScript) | Same — runs in native webview |
-| Extension host | Sidecar process (in progress) |
-
-The TypeScript frontend is a direct port of VSCode's workbench. The Rust backend is in `src-tauri/src/commands/` and handles everything that would have been a Node.js native module: file I/O, terminal PTY, Git, file watching, search indexing, SQLite, and process management.
-
-### Project Layout
-
-```
-sidex/
-├── src/                    # TypeScript workbench (ported from VSCode)
-│   └── vs/
-│       ├── base/           # Core utilities
-│       ├── platform/       # Platform services and dependency injection
-│       ├── editor/         # Monaco editor
-│       └── workbench/      # IDE shell, panels, features, contributions
-├── src-tauri/              # Rust backend
-│   └── src/
-│       ├── commands/       # fs, terminal, git, search, debug, etc.
-│       ├── lib.rs          # App setup and command registration
-│       └── main.rs         # Entry point
-├── index.html
-├── vite.config.ts
-└── package.json
-```
-
-### Tech Stack
-
-| Layer | Technology |
-|---|---|
-| Frontend | TypeScript, Vite 6, Monaco Editor |
-| Terminal UI | xterm.js + WebGL renderer |
-| Syntax / Themes | vscode-textmate, vscode-oniguruma (WASM) |
-| Backend | Rust, Tauri 2 |
-| Terminal | portable-pty (Rust) |
-| File watching | notify crate (FSEvents on macOS) |
-| Search | dashmap + rayon + regex (parallel, Rust) |
-| Storage | SQLite via rusqlite |
-| Extensions | Open VSX registry |
-
-For a deeper dive, see [ARCHITECTURE.md](./ARCHITECTURE.md)
-
----
-
-## Contributing
-
-This was released early to get outside contributors involved.
-
-### How to Contribute
-
-1. Fork the repo and create a branch
-2. Pick something — check [Issues](https://github.com/Sidenai/sidex/issues) or grab something from the Known Gaps list above
-3. Submit a PR — contributors get credited
-
-### Dev Notes
-
-- Follows VSCode's patterns — familiar if you've read the VSCode source
-- TypeScript imports use `.js` extensions (ES module convention)
-- Services use VSCode's `@inject` dependency injection decorators
-- New Rust commands go in `src-tauri/src/commands/` and register in `lib.rs`
----
-
-## Community
-
-- **Discord:** [Join the SideX server](https://discord.gg/8CUCnEAC4J)
-- **X / Twitter:** [@ImRazshy](https://x.com/ImRazshy)
-- **Email:** kendall@siden.ai
-
----
+First build takes 5–10 minutes (Rust compile time). No pre-built binaries are distributed.
 
 ## License
 
-MIT — SideX is a port of [Visual Studio Code (Code - OSS)](https://github.com/microsoft/vscode), which is also MIT licensed. See [LICENSE](./LICENSE) for details.
+MIT. Alkahest carries forward the license chain from [Visual Studio Code (Code - OSS)](https://github.com/microsoft/vscode) and [SideX](https://github.com/Sidenai/sidex) — see [LICENSE](./LICENSE).

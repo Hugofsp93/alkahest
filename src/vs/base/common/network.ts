@@ -325,9 +325,9 @@ class FileAccessImpl {
 			return RemoteAuthorities.rewrite(uri);
 		}
 
-		if (uri.scheme === Schemas.file && (globalThis as any).__SIDEX_TAURI__) {
+		if (uri.scheme === Schemas.file && (globalThis as any).__ALKAHEST_TAURI__) {
 			const encoded = encodeURIComponent(uri.fsPath);
-			return URI.parse(`sidex-asset://localhost/${encoded}`);
+			return URI.parse(`alkahest-asset://localhost/${encoded}`);
 		}
 
 		// Convert to `vscode-file` resource..

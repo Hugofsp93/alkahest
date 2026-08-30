@@ -1,9 +1,9 @@
 use std::collections::HashMap;
 
 use serde::Serialize;
-use sidex_theme::theme::{Theme, ThemeKind};
-use sidex_theme::theme_resolver::{ThemeRegistry, UiTheme};
-use sidex_theme::token_color::FontStyle;
+use alkahest_theme::theme::{Theme, ThemeKind};
+use alkahest_theme::theme_resolver::{ThemeRegistry, UiTheme};
+use alkahest_theme::token_color::FontStyle;
 
 #[derive(Serialize)]
 pub struct ThemeInfo {
@@ -63,7 +63,7 @@ fn font_style_str(fs: FontStyle) -> Option<String> {
     Some(parts.join(" "))
 }
 
-fn workbench_colors_to_map(wb: &sidex_theme::WorkbenchColors) -> HashMap<String, String> {
+fn workbench_colors_to_map(wb: &alkahest_theme::WorkbenchColors) -> HashMap<String, String> {
     let json = serde_json::to_value(wb).unwrap_or_default();
     let mut map = HashMap::new();
     if let serde_json::Value::Object(obj) = json {
@@ -76,11 +76,11 @@ fn workbench_colors_to_map(wb: &sidex_theme::WorkbenchColors) -> HashMap<String,
     map
 }
 
-fn convert_token_rule(rule: &sidex_theme::TokenColorRule) -> TokenColorRule {
+fn convert_token_rule(rule: &alkahest_theme::TokenColorRule) -> TokenColorRule {
     TokenColorRule {
         scope: rule.scope.clone(),
         settings: TokenColorSettings {
-            foreground: rule.foreground.map(sidex_theme::Color::to_hex),
+            foreground: rule.foreground.map(alkahest_theme::Color::to_hex),
             font_style: font_style_str(rule.font_style),
         },
     }

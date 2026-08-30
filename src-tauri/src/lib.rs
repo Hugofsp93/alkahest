@@ -1,6 +1,6 @@
 mod commands;
 
-use commands::db_state::SidexDbState;
+use commands::db_state::AlkahestDbState;
 use commands::debug::{DapClientStore, DebugAdapterStore};
 use commands::ext_host::ExtensionPlatformSupervisor;
 use commands::extension_diagnostics::ExtensionDiagnosticsStore;
@@ -336,8 +336,8 @@ fn build_menu(app: &tauri::AppHandle) -> tauri::Result<Menu<tauri::Wry>> {
         .separator()
         .build()?;
 
-    let sidex_menu = SubmenuBuilder::with_id(app, "sidex_menu", "SideX")
-        .item(&PredefinedMenuItem::about(app, Some("About SideX"), None)?)
+    let alkahest_menu = SubmenuBuilder::with_id(app, "alkahest_menu", "Alkahest")
+        .item(&PredefinedMenuItem::about(app, Some("About Alkahest"), None)?)
         .separator()
         .item(&PredefinedMenuItem::services(app, None)?)
         .separator()
@@ -351,7 +351,7 @@ fn build_menu(app: &tauri::AppHandle) -> tauri::Result<Menu<tauri::Wry>> {
     let menu = Menu::with_items(
         app,
         &[
-            &sidex_menu,
+            &alkahest_menu,
             &file_menu,
             &edit_menu,
             &selection_menu,
@@ -388,12 +388,12 @@ pub fn run() {
         .manage(ExtensionPlatformSupervisor::new())
         .manage(ExtensionDiagnosticsStore::new())
         .manage(Arc::new(SettingsStore::new()))
-        .manage(Arc::new(sidex_extension_api::CommandRegistry::new()))
+        .manage(Arc::new(alkahest_extension_api::CommandRegistry::new()))
         .manage(Arc::new(RemoteManagerStore::new()))
         .manage(Arc::new(
             WasmExtensionRuntime::new().expect("failed to initialize WASM runtime"),
         ))
-        .register_asynchronous_uri_scheme_protocol("sidex-asset", |_ctx, request, responder| {
+        .register_asynchronous_uri_scheme_protocol("alkahest-asset", |_ctx, request, responder| {
             std::thread::spawn(move || {
                 let raw_path = request.uri().path();
                 let decoded = urlencoding::decode(raw_path.strip_prefix('/').unwrap_or(raw_path))
@@ -446,7 +446,7 @@ pub fn run() {
                 .app_data_dir()
                 .expect("failed to resolve app data dir");
             std::fs::create_dir_all(&app_data).ok();
-            let db_path = app_data.join("sidex_storage.db");
+            let db_path = app_data.join("alkahest_storage.db");
             let db = StorageDb::new(db_path.to_str().unwrap())
                 .expect("failed to initialize storage database");
 
@@ -467,10 +467,10 @@ pub fn run() {
                 }
             }
 
-            let sidex_db_path = app_data.join("sidex_state.db");
-            let sidex_db = sidex_db::Database::open(&sidex_db_path)
-                .expect("failed to initialize sidex-db state database");
-            app.manage(Arc::new(SidexDbState::new(sidex_db)));
+            let alkahest_db_path = app_data.join("alkahest_state.db");
+            let alkahest_db = alkahest_db::Database::open(&alkahest_db_path)
+                .expect("failed to initialize alkahest-db state database");
+            app.manage(Arc::new(AlkahestDbState::new(alkahest_db)));
 
             let process_store = app.state::<Arc<ProcessStore>>();
             process_store.set_app_handle(app.handle().clone());
@@ -514,7 +514,7 @@ pub fn run() {
             if let Some(window) = app.get_webview_window("main") {
                 let escaped = id.replace('\\', "\\\\").replace('\'', "\\'");
                 let _ = window.eval(format!(
-                    "window.dispatchEvent(new CustomEvent('sidex-native-menu', {{ detail: '{escaped}' }}))"
+                    "window.dispatchEvent(new CustomEvent('alkahest-native-menu', {{ detail: '{escaped}' }}))"
                 ));
             }
         })
@@ -593,7 +593,7 @@ pub fn run() {
             commands::get_available_shells,
             commands::get_shell_integration_dir,
             commands::setup_zsh_dotdir,
-            // sidex-terminal crate features
+            // alkahest-terminal crate features
             commands::terminal_detect_shell,
             commands::terminal_get_profiles,
             commands::terminal_find_in_buffer,
@@ -638,7 +638,7 @@ pub fn run() {
             commands::storage_set,
             commands::storage_delete,
             commands::storage_list,
-            // sidex-db state persistence
+            // alkahest-db state persistence
             commands::db_get_recent_files,
             commands::db_get_recent_workspaces,
             commands::db_save_workspace_state,
@@ -734,7 +734,7 @@ pub fn run() {
             commands::uninstall_extension,
             commands::list_installed_extensions,
             commands::list_available_extensions,
-            // Marketplace & contributions (sidex-extensions)
+            // Marketplace & contributions (alkahest-extensions)
             commands::extension_search_marketplace,
             commands::extension_get_contributions,
             // WASM extensions

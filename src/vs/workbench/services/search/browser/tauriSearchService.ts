@@ -1,5 +1,5 @@
 /*---------------------------------------------------------------------------------------------
- *  SideX — Tauri-backed search provider.
+ *  Alkahest — Tauri-backed search provider.
  *  Delegates file search and text search to Rust via invoke().
  *--------------------------------------------------------------------------------------------*/
 
@@ -113,7 +113,7 @@ class TauriSearchProvider extends Disposable implements ISearchResultProvider {
 					limitHit = true;
 				}
 			} catch (err) {
-				this.logService.error('[SideX-Search] textSearch failed:', err);
+				this.logService.error('[Alkahest-Search] textSearch failed:', err);
 			}
 		}
 
@@ -148,7 +148,7 @@ class TauriSearchProvider extends Disposable implements ISearchResultProvider {
 					limitHit = true;
 				}
 			} catch (err) {
-				this.logService.error('[SideX-Search] fileSearch failed:', err);
+				this.logService.error('[Alkahest-Search] fileSearch failed:', err);
 			}
 		}
 

@@ -1,4 +1,4 @@
-//! High-performance process and terminal management module for `SideX`
+//! High-performance process and terminal management module for `Alkahest`
 //!
 //! Features:
 //! - PTY (pseudo-terminal) support with full terminal emulation
@@ -338,7 +338,7 @@ impl ProcessStore {
     }
 
     /// Drain pending output and return the full buffer text for a terminal.
-    /// Used by `sidex_terminal` find-in-buffer integration.
+    /// Used by `alkahest_terminal` find-in-buffer integration.
     pub fn buffer_text(&self, handle: TermHandle) -> Result<String, String> {
         let mut terminals = self.terminals.lock().map_err(|e| e.to_string())?;
         let terminal = terminals
@@ -603,7 +603,7 @@ pub fn term_spawn(
     // Set environment variables
     cmd.env("TERM", "xterm-256color");
     cmd.env("COLORTERM", "truecolor");
-    cmd.env("TERM_PROGRAM", "SideX");
+    cmd.env("TERM_PROGRAM", "Alkahest");
     cmd.env("TERM_PROGRAM_VERSION", env!("CARGO_PKG_VERSION"));
 
     // Copy essential environment (platform-aware)

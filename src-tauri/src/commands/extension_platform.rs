@@ -45,7 +45,7 @@ impl ResolvedNode {
 }
 
 /// Extension manifest record produced entirely by Rust.
-/// Works for both Node (package.json) and WASM (sidex.toml) extensions.
+/// Works for both Node (package.json) and WASM (alkahest.toml) extensions.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionManifest {
@@ -105,15 +105,15 @@ pub fn path_to_uri_path(path: &str) -> String {
 }
 
 #[derive(Debug, Deserialize)]
-struct SidexTomlManifest {
-    extension: SidexTomlExtension,
-    activation: Option<SidexTomlActivation>,
-    contributes: Option<SidexTomlContributes>,
+struct AlkahestTomlManifest {
+    extension: AlkahestTomlExtension,
+    activation: Option<AlkahestTomlActivation>,
+    contributes: Option<AlkahestTomlContributes>,
 }
 
 #[allow(dead_code)]
 #[derive(Debug, Deserialize)]
-struct SidexTomlExtension {
+struct AlkahestTomlExtension {
     id: String,
     name: String,
     version: String,
@@ -123,22 +123,22 @@ struct SidexTomlExtension {
 }
 
 #[derive(Debug, Deserialize)]
-struct SidexTomlActivation {
+struct AlkahestTomlActivation {
     #[serde(default)]
     events: Vec<String>,
 }
 
 #[derive(Debug, Deserialize)]
-struct SidexTomlContributes {
+struct AlkahestTomlContributes {
     #[serde(default)]
     languages: Vec<String>,
     #[serde(default)]
-    commands: Vec<SidexTomlCommand>,
+    commands: Vec<AlkahestTomlCommand>,
 }
 
 #[allow(dead_code)]
 #[derive(Debug, Deserialize)]
-struct SidexTomlCommand {
+struct AlkahestTomlCommand {
     id: String,
     title: String,
 }
@@ -147,10 +147,10 @@ pub fn read_wasm_extension_manifest(
     app: &AppHandle,
     ext_dir: &Path,
 ) -> Result<ExtensionManifest, String> {
-    let toml_path = ext_dir.join("sidex.toml");
+    let toml_path = ext_dir.join("alkahest.toml");
     let raw =
         fs::read_to_string(&toml_path).map_err(|e| format!("read {}: {e}", toml_path.display()))?;
-    let manifest: SidexTomlManifest =
+    let manifest: AlkahestTomlManifest =
         toml::from_str(&raw).map_err(|e| format!("parse {}: {e}", toml_path.display()))?;
 
     let wasm_path = ext_dir.join(&manifest.extension.wasm);
@@ -257,15 +257,15 @@ pub struct InitDataRemote {
 }
 
 pub fn user_extensions_dir() -> PathBuf {
-    sidex_extensions::paths::user_extensions_dir()
+    alkahest_extensions::paths::user_extensions_dir()
 }
 
 pub fn global_storage_dir() -> PathBuf {
-    sidex_extensions::paths::global_storage_dir()
+    alkahest_extensions::paths::global_storage_dir()
 }
 
 fn user_data_dir() -> PathBuf {
-    sidex_extensions::paths::user_data_dir()
+    alkahest_extensions::paths::user_data_dir()
 }
 
 pub fn resolve_server_script(app: &AppHandle) -> PathBuf {
@@ -327,7 +327,7 @@ fn is_usable_node(binary: &str) -> bool {
 pub fn bundled_node_candidates(app: &AppHandle) -> Vec<PathBuf> {
     let mut candidates = Vec::new();
 
-    if let Ok(path) = std::env::var("SIDEX_NODE_BINARY") {
+    if let Ok(path) = std::env::var("ALKAHEST_NODE_BINARY") {
         candidates.push(PathBuf::from(path));
     }
 
@@ -392,7 +392,7 @@ pub fn resolve_node_runtime(app: &AppHandle) -> Result<ResolvedNode, String> {
         }
     }
 
-    Err("Node runtime not found. Bundle Node with SideX or install Node.js (>=18).".into())
+    Err("Node runtime not found. Bundle Node with Alkahest or install Node.js (>=18).".into())
 }
 
 fn extension_source(app: &AppHandle, path: &Path) -> (String, bool) {
@@ -408,7 +408,7 @@ fn extension_source(app: &AppHandle, path: &Path) -> (String, bool) {
 }
 
 fn is_version_greater(a: &str, b: &str) -> bool {
-    sidex_extensions::manifest::is_version_greater(a, b)
+    alkahest_extensions::manifest::is_version_greater(a, b)
 }
 
 fn manifest_entry_exists(ext_dir: &Path, entry: &str) -> bool {
@@ -421,7 +421,7 @@ pub fn read_extension_manifest(
     ext_dir: &Path,
 ) -> Result<ExtensionManifest, String> {
     let pkg_path = ext_dir.join("package.json");
-    let raw = sidex_extensions::encoding::read_manifest_file(&pkg_path)
+    let raw = alkahest_extensions::encoding::read_manifest_file(&pkg_path)
         .map_err(|e| format!("read {}: {e}", pkg_path.display()))?;
     let val: serde_json::Value =
         serde_json::from_str(&raw).map_err(|e| format!("parse {}: {e}", pkg_path.display()))?;
@@ -553,7 +553,7 @@ pub fn extension_search_paths(app: &AppHandle) -> Vec<PathBuf> {
 }
 
 pub fn scan_extensions(app: &AppHandle, paths: &[PathBuf]) -> Vec<ExtensionManifest> {
-    let mut disable_ids: HashSet<String> = std::env::var("SIDEX_DISABLE_EXTENSION_IDS")
+    let mut disable_ids: HashSet<String> = std::env::var("ALKAHEST_DISABLE_EXTENSION_IDS")
         .unwrap_or_else(|_| "ms-python.vscode-pylance".to_string())
         .split(',')
         .map(str::trim)
@@ -588,7 +588,7 @@ pub fn scan_extensions(app: &AppHandle, paths: &[PathBuf]) -> Vec<ExtensionManif
             }
 
             let ext_dir = entry.path();
-            let manifest = if ext_dir.join("sidex.toml").exists() {
+            let manifest = if ext_dir.join("alkahest.toml").exists() {
                 read_wasm_extension_manifest(app, &ext_dir)
             } else {
                 read_extension_manifest(app, &ext_dir)
@@ -631,7 +631,7 @@ pub fn build_extension_descriptions(manifests: &[ExtensionManifest]) -> Vec<Exte
         .filter(|m| m.kind == ExtensionKind::Node && (m.main.is_some() || m.browser.is_some()))
         .map(|m| {
             let pkg_path = Path::new(&m.path).join("package.json");
-            let package_json = sidex_extensions::encoding::read_manifest_file(&pkg_path)
+            let package_json = alkahest_extensions::encoding::read_manifest_file(&pkg_path)
                 .ok()
                 .and_then(|raw| serde_json::from_str::<serde_json::Value>(&raw).ok())
                 .unwrap_or(serde_json::Value::Null);
@@ -673,9 +673,9 @@ pub fn build_init_data(
                 .unwrap_or_else(|_| PathBuf::from("."))
                 .to_string_lossy()
                 .to_string(),
-            app_name: "SideX".to_string(),
+            app_name: "Alkahest".to_string(),
             app_host: "desktop".to_string(),
-            app_uri_scheme: "sidex".to_string(),
+            app_uri_scheme: "alkahest".to_string(),
             app_language: "en".to_string(),
             extension_telemetry_log_resource: UriComponents {
                 scheme: "file".to_string(),
@@ -779,7 +779,7 @@ pub async fn extension_platform_bootstrap(
                 }
             }
             log::info!("[platform] {count} WASM extensions loaded, emitting ready event");
-            let _ = app_handle.emit("sidex-wasm-extensions-ready", count);
+            let _ = app_handle.emit("alkahest-wasm-extensions-ready", count);
         });
     }
 

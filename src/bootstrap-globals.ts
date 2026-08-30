@@ -1,5 +1,5 @@
 /*---------------------------------------------------------------------------------------------
- *  SideX — Tauri-based VSCode port
+ *  Alkahest — Tauri-based VSCode port
  *  Bootstrap: sets globals that VSCode needs BEFORE any VSCode code loads
  *--------------------------------------------------------------------------------------------*/
 
@@ -9,11 +9,11 @@
 (globalThis as any)._VSCODE_NLS_LANGUAGE = 'en';
 
 (globalThis as any)._VSCODE_PRODUCT_JSON = {
-	nameShort: 'SideX',
-	nameLong: 'SideX',
-	applicationName: 'sidex',
-	dataFolderName: '.sidex',
-	urlProtocol: 'sidex',
+	nameShort: 'Alkahest',
+	nameLong: 'Alkahest',
+	applicationName: 'alkahest',
+	dataFolderName: '.alkahest',
+	urlProtocol: 'alkahest',
 	version: '1.96.0',
 	commit: '',
 	date: new Date().toISOString(),

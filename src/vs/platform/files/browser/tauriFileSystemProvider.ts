@@ -1,5 +1,5 @@
 /*---------------------------------------------------------------------------------------------
- *  SideX — Tauri-backed file system provider.
+ *  Alkahest — Tauri-backed file system provider.
  *  Handles `file` and `vscode-file` schemes by delegating all I/O to the
  *  Rust backend via `invoke()` from @tauri-apps/api/core.
  *--------------------------------------------------------------------------------------------*/
@@ -130,7 +130,7 @@ export class TauriFileSystemProvider extends Disposable implements IFileSystemPr
 			const msg = typeof err === 'string' ? err : err instanceof Error ? err.message : String(err);
 			const isNotFound = /no such file|not found|ENOENT/i.test(msg);
 			if (!isNotFound) {
-				console.debug('[SideX-FS] stat failed:', path, err);
+				console.debug('[Alkahest-FS] stat failed:', path, err);
 			}
 			throw TauriFileSystemProvider.toError(err, resource, FileSystemProviderErrorCode.FileNotFound);
 		}
@@ -162,7 +162,7 @@ export class TauriFileSystemProvider extends Disposable implements IFileSystemPr
 			const msg = typeof err === 'string' ? err : err instanceof Error ? err.message : String(err);
 			const isNotFound = /no such file|not found|ENOENT/i.test(msg);
 			if (!isNotFound) {
-				console.debug('[SideX-FS] readdir failed:', path, err);
+				console.debug('[Alkahest-FS] readdir failed:', path, err);
 			}
 			throw TauriFileSystemProvider.toError(err, resource, FileSystemProviderErrorCode.FileNotFound);
 		}

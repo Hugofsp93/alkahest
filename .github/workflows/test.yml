@@ -7,7 +7,7 @@ on:
       - ".github/workflows/test.yml"
       - "crates/**"
       - "src-tauri/**"
-      - "sidex-extension-sdk/**"
+      - "alkahest-extension-sdk/**"
       - "Cargo.toml"
       - "Cargo.lock"
   pull_request:
@@ -16,7 +16,7 @@ on:
       - ".github/workflows/test.yml"
       - "crates/**"
       - "src-tauri/**"
-      - "sidex-extension-sdk/**"
+      - "alkahest-extension-sdk/**"
       - "Cargo.toml"
       - "Cargo.lock"
 

@@ -1,5 +1,5 @@
 /*---------------------------------------------------------------------------------------------
- *  SideX: Stub for removed notebook range types.
+ *  Alkahest: Stub for removed notebook range types.
  *--------------------------------------------------------------------------------------------*/
 
 export interface ICellRange {

@@ -1,5 +1,5 @@
 # =============================================================================
-# SideX .gitignore
+# Alkahest .gitignore
 # =============================================================================
 
 # ── Dependencies ─────────────────────────────────────────────────────────────
@@ -23,7 +23,7 @@ build/
 # ── Cargo.lock for library crates ───────────────────────────────────────────
 # Library lock files should not be committed (Cargo best practice).
 # The application lock (src-tauri/Cargo.lock) IS committed.
-sidex-extension-sdk/Cargo.lock
+alkahest-extension-sdk/Cargo.lock
 extensions-rust/Cargo.lock
 examples/**/Cargo.lock
 
@@ -53,6 +53,9 @@ ehthumbs.db
 # ── Local dev tooling (Cargo overrides, Claude Code state) ───────────────────
 .cargo/
 .claude/
+graphify-out/
+/CLAUDE.md
+/IDEA.md
 
 # ── Environment / Secrets ────────────────────────────────────────────────────
 .env

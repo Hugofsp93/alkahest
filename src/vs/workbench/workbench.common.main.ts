@@ -1,5 +1,5 @@
 /*---------------------------------------------------------------------------------------------
- *  SideX - A fast, native code editor
+ *  Alkahest - A fast, native code editor
  *  Copyright (c) Siden Technologies, Inc. MIT Licensed.
  *--------------------------------------------------------------------------------------------*/
 
@@ -7,20 +7,20 @@
 
 import '../editor/editor.all.js';
 
-// SideX: Register null stubs for stripped services (must be early)
-import './sidexNullServices.js';
+// Alkahest: Register null stubs for stripped services (must be early)
+import './alkahestNullServices.js';
 
-// SideX: Register Rust-backed bridge services as DI singletons
-import '../platform/sidex/browser/sidexFileSystemProvider.js';
-import '../platform/sidex/browser/sidexSearchProvider.js';
-import '../platform/sidex/browser/sidexSCMProvider.js';
-import '../platform/sidex/browser/sidexSyntaxService.js';
-import '../platform/sidex/browser/sidexLspService.js';
-import '../platform/sidex/browser/sidexDapService.js';
-import '../platform/sidex/browser/sidexRemoteService.js';
-import '../platform/sidex/common/sidexThemeService.js';
-import '../platform/sidex/common/sidexSettingsService.js';
-import '../platform/sidex/common/sidexKeymapService.js';
+// Alkahest: Register Rust-backed bridge services as DI singletons
+import '../platform/alkahest/browser/alkahestFileSystemProvider.js';
+import '../platform/alkahest/browser/alkahestSearchProvider.js';
+import '../platform/alkahest/browser/alkahestSCMProvider.js';
+import '../platform/alkahest/browser/alkahestSyntaxService.js';
+import '../platform/alkahest/browser/alkahestLspService.js';
+import '../platform/alkahest/browser/alkahestDapService.js';
+import '../platform/alkahest/browser/alkahestRemoteService.js';
+import '../platform/alkahest/common/alkahestThemeService.js';
+import '../platform/alkahest/common/alkahestSettingsService.js';
+import '../platform/alkahest/common/alkahestKeymapService.js';
 
 import './api/browser/extensionHost.contribution.js';
 import './browser/workbench.contribution.js';

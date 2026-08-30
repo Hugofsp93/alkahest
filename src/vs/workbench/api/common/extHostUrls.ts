@@ -1,5 +1,5 @@
 /*---------------------------------------------------------------------------------------------
- *  SideX — ExtHost URL handler stub. URL handlers are accepted but never dispatched;
+ *  Alkahest — ExtHost URL handler stub. URL handlers are accepted but never dispatched;
  *  external URLs are handled by the Tauri shell plugin directly.
  *--------------------------------------------------------------------------------------------*/
 

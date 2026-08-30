@@ -1,5 +1,5 @@
 use serde::Serialize;
-use sidex_extension_api::CommandRegistry;
+use alkahest_extension_api::CommandRegistry;
 use std::env;
 use std::sync::Arc;
 use tauri::State;

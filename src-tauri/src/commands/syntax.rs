@@ -1,6 +1,6 @@
 use serde::Serialize;
-use sidex_syntax::highlight::{HighlightConfig, Highlighter, SyntaxHighlighter, TokenScope};
-use sidex_syntax::language::{builtin_language_configurations, LanguageConfiguration};
+use alkahest_syntax::highlight::{HighlightConfig, Highlighter, SyntaxHighlighter, TokenScope};
+use alkahest_syntax::language::{builtin_language_configurations, LanguageConfiguration};
 use std::path::Path;
 use std::sync::OnceLock;
 
@@ -233,10 +233,10 @@ pub fn textmate_tokenize_lines(
     grammar_json: String,
     source: String,
 ) -> Result<Vec<TextMateLineTokens>, String> {
-    let grammar = sidex_syntax::textmate::TextMateGrammar::from_json(&grammar_json)
+    let grammar = alkahest_syntax::textmate::TextMateGrammar::from_json(&grammar_json)
         .map_err(|e| format!("parse grammar: {e}"))?;
-    let tokenizer = sidex_syntax::textmate::TextMateTokenizer::new(&grammar);
-    let mut state = sidex_syntax::textmate::TokenizerState::default();
+    let tokenizer = alkahest_syntax::textmate::TextMateTokenizer::new(&grammar);
+    let mut state = alkahest_syntax::textmate::TokenizerState::default();
 
     let mut out = Vec::with_capacity(source.lines().count());
     for (idx, line) in source.lines().enumerate() {

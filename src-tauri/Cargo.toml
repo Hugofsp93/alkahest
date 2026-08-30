@@ -1,19 +1,19 @@
 [package]
-name = "sidex"
+name = "alkahest"
 version = "0.1.3"
-description = "SideX - A fast, open-source code editor"
+description = "Alkahest - A fast, open-source code editor"
 authors = ["Siden Technologies Inc"]
 license = "MIT"
-repository = "https://github.com/sidenai/sidex"
+repository = "https://github.com/Hugofsp93/alkahest"
 edition = "2021"
 rust-version = "1.91.0"
 
 [[bin]]
-name = "SideX"
+name = "Alkahest"
 path = "src/main.rs"
 
 [lib]
-name = "sidex_lib"
+name = "alkahest_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]
@@ -89,29 +89,29 @@ wasmtime = { version = "43", default-features = false, features = [
 wasmtime-wasi = "43"
 toml = "0.8"
 anyhow = "1"
-sidex-db = { path = "../crates/sidex-db" }
-sidex-dap = { path = "../crates/sidex-dap" }
-sidex-remote = { path = "../crates/sidex-remote" }
-sidex-settings = { path = "../crates/sidex-settings" }
-sidex-theme = { path = "../crates/sidex-theme" }
+alkahest-db = { path = "../crates/alkahest-db" }
+alkahest-dap = { path = "../crates/alkahest-dap" }
+alkahest-remote = { path = "../crates/alkahest-remote" }
+alkahest-settings = { path = "../crates/alkahest-settings" }
+alkahest-theme = { path = "../crates/alkahest-theme" }
 
-# SideX crates
-sidex-git = { path = "../crates/sidex-git" }
-sidex-workspace = { path = "../crates/sidex-workspace" }
+# Alkahest crates
+alkahest-git = { path = "../crates/alkahest-git" }
+alkahest-workspace = { path = "../crates/alkahest-workspace" }
 
 # Internal crates
-sidex-text = { path = "../crates/sidex-text" }
-sidex-syntax = { path = "../crates/sidex-syntax" }
-sidex-tasks = { path = "../crates/sidex-tasks" }
-sidex-extensions = { path = "../crates/sidex-extensions" }
-sidex-terminal = { path = "../crates/sidex-terminal" }
-sidex-lsp = { path = "../crates/sidex-lsp" }
-sidex-keymap = { path = "../crates/sidex-keymap" }
-sidex-extension-api = { path = "../crates/sidex-extension-api" }
-sidex-update = { path = "../crates/sidex-update" }
-sidex-profiles = { path = "../crates/sidex-profiles" }
-sidex-auth = { path = "../crates/sidex-auth" }
-sidex-textmate = { path = "../crates/sidex-textmate" }
+alkahest-text = { path = "../crates/alkahest-text" }
+alkahest-syntax = { path = "../crates/alkahest-syntax" }
+alkahest-tasks = { path = "../crates/alkahest-tasks" }
+alkahest-extensions = { path = "../crates/alkahest-extensions" }
+alkahest-terminal = { path = "../crates/alkahest-terminal" }
+alkahest-lsp = { path = "../crates/alkahest-lsp" }
+alkahest-keymap = { path = "../crates/alkahest-keymap" }
+alkahest-extension-api = { path = "../crates/alkahest-extension-api" }
+alkahest-update = { path = "../crates/alkahest-update" }
+alkahest-profiles = { path = "../crates/alkahest-profiles" }
+alkahest-auth = { path = "../crates/alkahest-auth" }
+alkahest-textmate = { path = "../crates/alkahest-textmate" }
 
 tree-sitter = "0.24"
 tree-sitter-rust = "0.23"

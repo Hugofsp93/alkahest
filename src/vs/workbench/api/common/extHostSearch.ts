@@ -1,5 +1,5 @@
 /*---------------------------------------------------------------------------------------------
- *  SideX — ExtHost search stub. Search is routed through TauriSearchService; extension-
+ *  Alkahest — ExtHost search stub. Search is routed through TauriSearchService; extension-
  *  registered search providers are accepted but not wired to a manager.
  *--------------------------------------------------------------------------------------------*/
 
@@ -86,7 +86,7 @@ export class ExtHostSearch implements IExtHostSearch {
 		}
 		set.add(scheme);
 		this._logService.trace(
-			`[SideX] extHostSearch: ignoring ${kind} provider for scheme '${scheme}' (search routed through Rust)`
+			`[Alkahest] extHostSearch: ignoring ${kind} provider for scheme '${scheme}' (search routed through Rust)`
 		);
 		return toDisposable(() => set.delete(scheme));
 	}

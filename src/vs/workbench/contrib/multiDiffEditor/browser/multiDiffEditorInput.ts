@@ -1,5 +1,5 @@
 /*---------------------------------------------------------------------------------------------
- *  SideX: Stub for removed multi diff editor input.
+ *  Alkahest: Stub for removed multi diff editor input.
  *--------------------------------------------------------------------------------------------*/
 
 export class MultiDiffEditorInput {

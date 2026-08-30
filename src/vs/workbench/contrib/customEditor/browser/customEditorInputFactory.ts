@@ -1,5 +1,5 @@
 /*---------------------------------------------------------------------------------------------
- *  SideX: Stub for removed custom editor input factory.
+ *  Alkahest: Stub for removed custom editor input factory.
  *--------------------------------------------------------------------------------------------*/
 
 export interface CustomDocumentBackupData {

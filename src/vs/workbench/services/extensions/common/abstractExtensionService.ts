@@ -373,7 +373,7 @@ export abstract class AbstractExtensionService extends Disposable implements IEx
 			}
 		}
 
-		if ((globalThis as any).__SIDEX_TAURI__) {
+		if ((globalThis as any).__ALKAHEST_TAURI__) {
 			return true;
 		}
 

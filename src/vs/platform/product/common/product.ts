@@ -63,15 +63,15 @@ else {
 	if (Object.keys(product).length === 0) {
 		Object.assign(product, {
 			version: '1.110.0',
-			nameShort: 'SideX',
-			nameLong: 'SideX',
-			applicationName: 'sidex',
-			dataFolderName: '.sidex',
-			urlProtocol: 'sidex',
-			reportIssueUrl: 'https://github.com/Razshy/sidexvs/issues/new',
+			nameShort: 'Alkahest',
+			nameLong: 'Alkahest',
+			applicationName: 'alkahest',
+			dataFolderName: '.alkahest',
+			urlProtocol: 'alkahest',
+			reportIssueUrl: 'https://github.com/Razshy/alkahestvs/issues/new',
 			licenseName: 'MIT',
-			licenseUrl: 'https://github.com/Razshy/sidexvs/blob/main/LICENSE',
-			serverLicenseUrl: 'https://github.com/Razshy/sidexvs/blob/main/LICENSE',
+			licenseUrl: 'https://github.com/Razshy/alkahestvs/blob/main/LICENSE',
+			serverLicenseUrl: 'https://github.com/Razshy/alkahestvs/blob/main/LICENSE',
 			extensionsGallery: {
 				serviceUrl: 'https://marketplace.siden.ai/api/gallery',
 				controlUrl: 'https://az764295.vo.msecnd.net/extensions/marketplace.json',

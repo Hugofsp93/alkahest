@@ -15,7 +15,7 @@ import { AbstractFileDialogService } from './abstractFileDialogService.js';
 import { Schemas } from '../../../../base/common/network.js';
 
 /**
- * SideX file dialog service — always routes through the Tauri native dialog
+ * Alkahest file dialog service — always routes through the Tauri native dialog
  * plugin. The HTML File System Access / IndexedDB fallbacks from upstream
  * VS Code have been removed; all file I/O flows through the Rust backend.
  */
@@ -69,7 +69,7 @@ export class FileDialogService extends AbstractFileDialogService implements IFil
 				});
 			}
 		} catch (e) {
-			console.error('[SideX] Failed to open folder dialog:', e);
+			console.error('[Alkahest] Failed to open folder dialog:', e);
 		}
 	}
 
@@ -82,7 +82,7 @@ export class FileDialogService extends AbstractFileDialogService implements IFil
 				await this.editorService.openEditor({ resource: fileUri, options: { pinned: true } });
 			}
 		} catch (e) {
-			console.error('[SideX] Failed to open file dialog:', e);
+			console.error('[Alkahest] Failed to open file dialog:', e);
 		}
 	}
 
@@ -106,7 +106,7 @@ export class FileDialogService extends AbstractFileDialogService implements IFil
 				return URI.file(result);
 			}
 		} catch (e) {
-			console.error('[SideX] Save dialog failed:', e);
+			console.error('[Alkahest] Save dialog failed:', e);
 		}
 		return undefined;
 	}
@@ -130,7 +130,7 @@ export class FileDialogService extends AbstractFileDialogService implements IFil
 				return URI.file(result);
 			}
 		} catch (e) {
-			console.error('[SideX] Save dialog failed:', e);
+			console.error('[Alkahest] Save dialog failed:', e);
 		}
 		return undefined;
 	}
@@ -160,7 +160,7 @@ export class FileDialogService extends AbstractFileDialogService implements IFil
 			const paths = Array.isArray(result) ? result : [result];
 			return paths.map(p => URI.file(p));
 		} catch (e) {
-			console.error('[SideX] Open dialog failed:', e);
+			console.error('[Alkahest] Open dialog failed:', e);
 		}
 		return undefined;
 	}

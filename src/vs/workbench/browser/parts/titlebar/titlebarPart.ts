@@ -562,7 +562,7 @@ export class BrowserTitlebarPart extends Part implements ITitlebarPart {
 
 		// Draggable region that we can manipulate for #52522
 		this.dragRegion = prepend(this.rootContainer, $('div.titlebar-drag-region'));
-		if ((globalThis as any).__SIDEX_TAURI__) {
+		if ((globalThis as any).__ALKAHEST_TAURI__) {
 			this.dragRegion.style.setProperty('-webkit-app-region', 'no-drag');
 			// this.dragRegion.style.pointerEvents = 'none';
 
@@ -674,7 +674,7 @@ export class BrowserTitlebarPart extends Part implements ITitlebarPart {
 					this.windowControlsContainer.classList.add('wco-enabled');
 				}
 
-				if (!isMacintosh && (globalThis as any).__SIDEX_TAURI__) {
+				if (!isMacintosh && (globalThis as any).__ALKAHEST_TAURI__) {
 					const minBtn = append(this.windowControlsContainer, $('div.window-icon.window-min'));
 					const minIcon = append(minBtn, $('span.codicon.codicon-chrome-minimize'));
 					minIcon.setAttribute('aria-hidden', 'true');

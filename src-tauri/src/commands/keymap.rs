@@ -3,7 +3,7 @@ use std::sync::OnceLock;
 
 use serde::Serialize;
 use serde_json::Value;
-use sidex_keymap::{
+use alkahest_keymap::{
     default_keybindings, format_keybinding, parse_keybinding_string, ContextKeys, ContextValue,
     KeybindingResolver, KeybindingSource,
 };

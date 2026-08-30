@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------------------------
- *  SideX — ExtHost managed sockets stub. Remote socket multiplexing is handled by the
- *  sidex-remote Rust crate; extension-level factories are accepted but not routed.
+ *  Alkahest — ExtHost managed sockets stub. Remote socket multiplexing is handled by the
+ *  alkahest-remote Rust crate; extension-level factories are accepted but not routed.
  *--------------------------------------------------------------------------------------------*/
 
 import { ExtHostManagedSocketsShape } from './extHost.protocol.js';
@@ -21,7 +21,7 @@ export class ExtHostManagedSockets implements IExtHostManagedSockets {
 	setFactory(_socketFactoryId: number, _makeConnection: () => Thenable<vscode.ManagedMessagePassing>): void {}
 
 	async $openRemoteSocket(_socketFactoryId: number): Promise<number> {
-		throw new Error('Managed sockets are not supported in SideX');
+		throw new Error('Managed sockets are not supported in Alkahest');
 	}
 	$remoteSocketWrite(_socketId: number, _buffer: VSBuffer): void {}
 	$remoteSocketEnd(_socketId: number): void {}

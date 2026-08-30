@@ -138,11 +138,11 @@ export class ExtensionService extends AbstractExtensionService implements IExten
 					this._logService.error(error);
 				}
 				this._logService.info(
-					`[SideX-Extensions] scanned system=${system.length} user=${user.length} dev=${development.length}`
+					`[Alkahest-Extensions] scanned system=${system.length} user=${user.length} dev=${development.length}`
 				);
 				const rustSys = system.find(e => e.identifier?.value?.toLowerCase?.() === 'vscode.rust');
 				this._logService.info(
-					`[SideX-Extensions] vscode.rust in system? ${rustSys ? 'YES' : 'NO'}`
+					`[Alkahest-Extensions] vscode.rust in system? ${rustSys ? 'YES' : 'NO'}`
 				);
 				return dedupExtensions(system, user, [], development, this._logService);
 			})();
@@ -250,7 +250,7 @@ class BrowserExtensionHostFactory implements IExtensionHostFactory {
 				return null;
 			}
 			case ExtensionHostKind.LocalWebWorker: {
-				if ((globalThis as any).__SIDEX_TAURI__) {
+				if ((globalThis as any).__ALKAHEST_TAURI__) {
 					return null;
 				}
 				const startup = ExtensionHostStartup.LazyAutoStart;

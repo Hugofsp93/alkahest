@@ -1470,7 +1470,7 @@ export class WorkspaceService extends Disposable implements IWorkbenchConfigurat
 			await this.configurationEditing
 		).writeConfiguration(editableConfigurationTarget, { key, value }, { scopes: overrides, ...options });
 
-		// Bridge write to Rust sidex-settings so the in-memory SettingsStore
+		// Bridge write to Rust alkahest-settings so the in-memory SettingsStore
 		// stays in sync with what was just persisted to disk. This is best
 		// effort: if the Tauri command is unavailable we already wrote the
 		// file above and the next reload will pick it up.

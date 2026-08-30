@@ -1,5 +1,5 @@
 /*---------------------------------------------------------------------------------------------
- *  SideX: Stub for removed comments controller.
+ *  Alkahest: Stub for removed comments controller.
  *--------------------------------------------------------------------------------------------*/
 
 export function revealCommentThread(

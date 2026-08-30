@@ -55,7 +55,7 @@ import './services/localization/browser/localeService.js';
 import './services/path/browser/pathService.js';
 import './services/themes/browser/browserHostColorSchemeService.js';
 import './services/encryption/browser/encryptionService.js';
-// SideX: removed — image resize not essential
+// Alkahest: removed — image resize not essential
 // import './services/imageResize/browser/imageResizeService.js';
 import './services/secrets/browser/secretStorageService.js';
 import './services/workingCopy/browser/workingCopyBackupService.js';
@@ -116,7 +116,7 @@ import './contrib/logs/browser/logs.contribution.js';
 
 import './contrib/localization/browser/localization.contribution.js';
 
-// Performance — removed: SideX has its own performance monitoring
+// Performance — removed: Alkahest has its own performance monitoring
 // import './contrib/performance/browser/performance.web.contribution.js';
 
 // Preferences
@@ -125,7 +125,7 @@ import './contrib/preferences/browser/keyboardLayoutPicker.js';
 // Debug
 import './contrib/debug/browser/extensionHostDebugService.js';
 
-// SideX: removed — welcome banner
+// Alkahest: removed — welcome banner
 // import './contrib/welcomeBanner/browser/welcomeBanner.contribution.js';
 
 // Webview
@@ -141,19 +141,19 @@ import './contrib/terminal/browser/terminalInstanceService.js';
 // Tasks
 import './contrib/tasks/browser/taskService.js';
 
-// SideX: removed — tags
+// Alkahest: removed — tags
 // import './contrib/tags/browser/workspaceTagsService.js';
 
-// Issues — removed: SideX has its own issue reporter
+// Issues — removed: Alkahest has its own issue reporter
 // import './contrib/issue/browser/issue.contribution.js';
 
-// Splash — removed: SideX has its own splash screen
+// Splash — removed: Alkahest has its own splash screen
 // import './contrib/splash/browser/splash.contribution.js';
 
-// SideX: removed — process explorer
+// Alkahest: removed — process explorer
 // import './contrib/processExplorer/browser/processExplorer.web.contribution.js';
 
-// SideX: removed — browser view
+// Alkahest: removed — browser view
 // import './contrib/browserView/browser/browserView.contribution.js';
 
 //#endregion

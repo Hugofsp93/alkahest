@@ -67,7 +67,7 @@ import './mainThreadPower.js';
 import './mainThreadWebviewManager.js';
 import './mainThreadWorkspace.js';
 import './mainThreadComments.js';
-// Notebook/Interactive — removed: SideX uses sidex-extension-api
+// Notebook/Interactive — removed: Alkahest uses alkahest-extension-api
 import './mainThreadTask.js';
 import './mainThreadLabelService.js';
 import './mainThreadTunnelService.js';
@@ -75,8 +75,8 @@ import './mainThreadAuthentication.js';
 import './mainThreadTimeline.js';
 import './mainThreadTesting.js';
 import './mainThreadSecretState.js';
-// Share — removed: SideX uses sidex-extension-api
-// ProfileContentHandlers — removed: SideX uses sidex-extension-api
+// Share — removed: Alkahest uses alkahest-extension-api
+// ProfileContentHandlers — removed: Alkahest uses alkahest-extension-api
 import './mainThreadDataChannels.js';
 import './mainThreadMeteredConnection.js';
 import './mainThreadBrowsers.js';

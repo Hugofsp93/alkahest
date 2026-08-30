@@ -1669,9 +1669,9 @@ class ExtensionHost extends EventEmitter {
   }
 
   _registerBuiltinCommands() {
-    this._commands.set('sidex.extHost.ping', () => 'pong');
+    this._commands.set('alkahest.extHost.ping', () => 'pong');
     this._commands.set('setContext', () => undefined);
-    this._commands.set('sidex.extHost.listLoaded', () => {
+    this._commands.set('alkahest.extHost.listLoaded', () => {
       const list = [];
       for (const [id, ext] of this._extensions) list.push({ id, activated: ext.activated });
       return list;
@@ -3180,7 +3180,7 @@ function createVscodeShim() {
         alignment = typeof priorityOrAlignment === 'number' ? priorityOrAlignment : 1;
         priority = typeof priorityArg === 'number' ? priorityArg : 0;
       } else {
-        itemId = `sidex-statusbar-${++host._reqId}`;
+        itemId = `alkahest-statusbar-${++host._reqId}`;
         alignment = typeof alignmentOrId === 'number' ? alignmentOrId : 1;
         priority = typeof priorityOrAlignment === 'number' ? priorityOrAlignment : 0;
       }
@@ -3378,7 +3378,7 @@ function createVscodeShim() {
       return result;
     },
     createTerminal(nameOrOptions, shellPath, shellArgs) {
-      const termId = `sidex-term-${++host._reqId}`;
+      const termId = `alkahest-term-${++host._reqId}`;
       let opts = {};
       if (typeof nameOrOptions === 'object' && nameOrOptions !== null) {
         opts = nameOrOptions;
@@ -3559,7 +3559,7 @@ function createVscodeShim() {
       let _activeItems = [];
       let _selectedItems = [];
       let _buttons = [];
-      const qpId = `sidex-qp-${++host._reqId}`;
+      const qpId = `alkahest-qp-${++host._reqId}`;
       return {
         get items() { return _items; },
         set items(v) { _items = v; },
@@ -3634,7 +3634,7 @@ function createVscodeShim() {
       let _enabled = true;
       let _buttons = [];
       let _valueSelection = undefined;
-      const ibId = `sidex-ib-${++host._reqId}`;
+      const ibId = `alkahest-ib-${++host._reqId}`;
       return {
         get value() { return _value; },
         set value(v) { _value = v; },
@@ -3681,7 +3681,7 @@ function createVscodeShim() {
       };
     },
     createWebviewPanel: (viewType, title, showOptions, options) => {
-      const panelId = `sidex-webview-${++host._reqId}`;
+      const panelId = `alkahest-webview-${++host._reqId}`;
       const messageEmitter = new VscEventEmitter();
       const disposeEmitter = new VscEventEmitter();
       const viewStateEmitter = new VscEventEmitter();
@@ -3836,13 +3836,13 @@ function createVscodeShim() {
     let _logLevel = 2;
     let _clipboardText = '';
     return {
-      appName: 'SideX',
+      appName: 'Alkahest',
       appRoot: process.cwd(),
       appHost: 'desktop',
       language: 'en',
       machineId: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}`,
       sessionId: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}`,
-      uriScheme: 'sidex',
+      uriScheme: 'alkahest',
       get shell() { return process.env.SHELL || process.env.COMSPEC || '/bin/sh'; },
       clipboard: {
         readText() {
@@ -3949,7 +3949,7 @@ function createVscodeShim() {
         return Promise.all(promises).then((arrays) => arrays.flat());
       },
       executeTask: (task) => {
-        const execId = `sidex-taskexec-${++host._reqId}`;
+        const execId = `alkahest-taskexec-${++host._reqId}`;
         host.emit('event', {
           type: 'executeTask',
           id: execId,
@@ -4986,12 +4986,12 @@ function installVscodeShim() {
   const Module = require('module');
   const original = Module._resolveFilename;
   Module._resolveFilename = function (request, parent, isMain, options) {
-    if (request === 'vscode') return '__sidex_vscode_shim__';
+    if (request === 'vscode') return '__alkahest_vscode_shim__';
     return original.call(this, request, parent, isMain, options);
   };
-  require.cache['__sidex_vscode_shim__'] = {
-    id: '__sidex_vscode_shim__',
-    filename: '__sidex_vscode_shim__',
+  require.cache['__alkahest_vscode_shim__'] = {
+    id: '__alkahest_vscode_shim__',
+    filename: '__alkahest_vscode_shim__',
     loaded: true,
     exports: null,
   };
@@ -5004,27 +5004,27 @@ function installVscodeShim() {
       version: '1.110.0',
       main: 'index.cjs',
     }));
-    fs.writeFileSync(path.join(vscDir, 'index.cjs'), "module.exports = globalThis.__sidex_vscode_shim__ || require('__sidex_vscode_shim__');");
+    fs.writeFileSync(path.join(vscDir, 'index.cjs'), "module.exports = globalThis.__alkahest_vscode_shim__ || require('__alkahest_vscode_shim__');");
   } catch {}
 }
 
 installVscodeShim();
 hostInstance = new ExtensionHost();
 const _vscodeShim = createVscodeShim();
-globalThis.__sidex_vscode_shim__ = _vscodeShim;
-require.cache['__sidex_vscode_shim__'].exports = _vscodeShim;
+globalThis.__alkahest_vscode_shim__ = _vscodeShim;
+require.cache['__alkahest_vscode_shim__'].exports = _vscodeShim;
 
 try {
   const { register } = require('module');
   if (typeof register === 'function') {
     const hostCjsPath = path.resolve(__dirname, 'host.cjs');
-    const shimExports = require.cache['__sidex_vscode_shim__']?.exports;
+    const shimExports = require.cache['__alkahest_vscode_shim__']?.exports;
     const namedKeys = shimExports ? Object.keys(shimExports).filter(k => k !== 'default' && k !== '__esModule') : [];
     const esmLines = [
       `import { createRequire } from 'node:module';`,
       `import { fileURLToPath } from 'node:url';`,
       `const _require = createRequire(${JSON.stringify(hostCjsPath)});`,
-      `const _shim = globalThis.__sidex_vscode_shim__ || _require('__sidex_vscode_shim__');`,
+      `const _shim = globalThis.__alkahest_vscode_shim__ || _require('__alkahest_vscode_shim__');`,
       `export default _shim;`,
       ...namedKeys.map(k => `export const ${k} = _shim.${k};`),
     ];
@@ -5044,18 +5044,18 @@ try {
 } catch {}
 
 
-if (process.env.SIDEX_EXTENSION_HOST === 'true' && process.send) {
+if (process.env.ALKAHEST_EXTENSION_HOST === 'true' && process.send) {
   const host = hostInstance;
   host.initialize();
 
   let initData = null;
   try {
-    if (process.env.SIDEX_INIT_DATA_FILE) {
-      const raw = require('fs').readFileSync(process.env.SIDEX_INIT_DATA_FILE, 'utf8');
+    if (process.env.ALKAHEST_INIT_DATA_FILE) {
+      const raw = require('fs').readFileSync(process.env.ALKAHEST_INIT_DATA_FILE, 'utf8');
       initData = JSON.parse(raw);
-      try { require('fs').unlinkSync(process.env.SIDEX_INIT_DATA_FILE); } catch {}
-    } else if (process.env.SIDEX_INIT_DATA) {
-      initData = JSON.parse(process.env.SIDEX_INIT_DATA);
+      try { require('fs').unlinkSync(process.env.ALKAHEST_INIT_DATA_FILE); } catch {}
+    } else if (process.env.ALKAHEST_INIT_DATA) {
+      initData = JSON.parse(process.env.ALKAHEST_INIT_DATA);
     }
   } catch (e) {
     log(`failed to parse init data: ${e.message}`);
@@ -5152,7 +5152,7 @@ if (process.env.SIDEX_EXTENSION_HOST === 'true' && process.send) {
 
   host.on('event', (event) => {
     if (process.send) {
-      process.send({ type: 'sidex:host-event', event });
+      process.send({ type: 'alkahest:host-event', event });
     }
   });
 
@@ -5162,10 +5162,10 @@ if (process.env.SIDEX_EXTENSION_HOST === 'true' && process.send) {
     const reply = host.handleMessage(msg);
     if (reply && typeof reply.then === 'function') {
       reply.then((r) => {
-        if (r && process.send) process.send({ type: 'sidex:host-reply', reply: r });
+        if (r && process.send) process.send({ type: 'alkahest:host-reply', reply: r });
       }).catch(() => {});
     } else if (reply && process.send) {
-      process.send({ type: 'sidex:host-reply', reply });
+      process.send({ type: 'alkahest:host-reply', reply });
     }
   });
 

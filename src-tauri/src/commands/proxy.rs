@@ -9,9 +9,9 @@ const MAX_RESPONSE_BYTES: usize = 50 * 1024 * 1024; // 50 MB
 const REQUEST_TIMEOUT: Duration = Duration::from_secs(30);
 
 const ALLOWED_HOSTS: &[&str] = &[
-    // SideX marketplace Worker (custom domain + workers.dev fallback)
+    // Alkahest marketplace Worker (custom domain + workers.dev fallback)
     "marketplace.siden.ai",
-    "sidex-marketplace-proxy.kendall-dd9.workers.dev",
+    "alkahest-marketplace-proxy.kendall-dd9.workers.dev",
     // Open VSX
     "open-vsx.org",
     "openvsx.eclipsecontent.org",

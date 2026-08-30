@@ -53,7 +53,7 @@ export class WebWorkerService implements IWebWorkerService {
 
 	getWorkerUrl(descriptor: WebWorkerDescriptor): string {
 		const isTauriProduction =
-			(globalThis as typeof globalThis & { __SIDEX_TAURI__?: boolean }).__SIDEX_TAURI__ === true &&
+			(globalThis as typeof globalThis & { __ALKAHEST_TAURI__?: boolean }).__ALKAHEST_TAURI__ === true &&
 			globalThis.location?.protocol === 'tauri:';
 		if (isTauriProduction) {
 			if (descriptor.label === 'editorWorkerService') {
@@ -156,19 +156,19 @@ function getWorkerBootstrapUrl(
 				`globalThis._VSCODE_NLS_MESSAGES = ${JSON.stringify(getNLSMessages())};`,
 				`globalThis._VSCODE_NLS_LANGUAGE = ${JSON.stringify(getNLSLanguage())};`,
 				`globalThis._VSCODE_FILE_ROOT = ${JSON.stringify(globalThis._VSCODE_FILE_ROOT)};`,
-				`globalThis.__SIDEX_TAURI__ = ${JSON.stringify(!!(globalThis as any).__SIDEX_TAURI__)};`,
+				`globalThis.__ALKAHEST_TAURI__ = ${JSON.stringify(!!(globalThis as any).__ALKAHEST_TAURI__)};`,
 				`const ttPolicy = globalThis.trustedTypes?.createPolicy('defaultWorkerFactory', { createScriptURL: value => value });`,
 				`globalThis.workerttPolicy = ttPolicy;`,
-				`const __sidexImportUrlRaw = (ttPolicy?.createScriptURL(${JSON.stringify(workerScriptUrl)}) ?? ${JSON.stringify(workerScriptUrl)});`,
-				`let __sidexImportUrl = String(__sidexImportUrlRaw);`,
-				`if (__sidexImportUrl.startsWith('tauri://')) {`,
-				`	const hashIndex = __sidexImportUrl.indexOf('#');`,
+				`const __alkahestImportUrlRaw = (ttPolicy?.createScriptURL(${JSON.stringify(workerScriptUrl)}) ?? ${JSON.stringify(workerScriptUrl)});`,
+				`let __alkahestImportUrl = String(__alkahestImportUrlRaw);`,
+				`if (__alkahestImportUrl.startsWith('tauri://')) {`,
+				`	const hashIndex = __alkahestImportUrl.indexOf('#');`,
 				`	if (hashIndex >= 0) {`,
-				`		__sidexImportUrl = __sidexImportUrl.slice(0, hashIndex);`,
+				`		__alkahestImportUrl = __alkahestImportUrl.slice(0, hashIndex);`,
 				`	}`,
 				`}`,
 				workerLoadingFailedErrorMessage ? 'try {' : '',
-				`await import(__sidexImportUrl);`,
+				`await import(__alkahestImportUrl);`,
 				workerLoadingFailedErrorMessage
 					? `} catch (err) { console.error(${JSON.stringify(workerLoadingFailedErrorMessage)}, err); throw err; }`
 					: '',

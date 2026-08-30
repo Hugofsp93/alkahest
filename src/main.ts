@@ -1,11 +1,11 @@
 /*---------------------------------------------------------------------------------------------
- *  SideX — Tauri-based VSCode port
+ *  Alkahest — Tauri-based VSCode port
  *  Entry point. Globals set by inline script in index.html.
  *--------------------------------------------------------------------------------------------*/
 
 import { loadNlsMessages } from './nls-loader.js';
 
-async function sidexOpenFolder() {
+async function alkahestOpenFolder() {
 	try {
 		const { open } = await import('@tauri-apps/plugin-dialog');
 		const { URI } = await import('./vs/base/common/uri.js');
@@ -14,10 +14,10 @@ async function sidexOpenFolder() {
 			navigateToFolder(URI.file(selected).toString());
 		}
 	} catch (e) {
-		console.error('[SideX] Failed to open folder picker:', e);
+		console.error('[Alkahest] Failed to open folder picker:', e);
 	}
 }
-(window as any).__sidex_openFolder = sidexOpenFolder;
+(window as any).__alkahest_openFolder = alkahestOpenFolder;
 
 function navigateToFolder(folderUri: string) {
 	const url = new URL(window.location.href);
@@ -31,50 +31,50 @@ async function boot() {
 
 	await Promise.all([
 		import('./vs/workbench/workbench.common.main.js').catch(e => {
-			console.error('[SideX] Barrel "common" failed:', e);
+			console.error('[Alkahest] Barrel "common" failed:', e);
 			throw e;
 		}),
 		import('./vs/workbench/browser/web.main.js').catch(e => {
-			console.error('[SideX] Barrel "web.main" failed:', e);
+			console.error('[Alkahest] Barrel "web.main" failed:', e);
 			throw e;
 		}),
 		import('./vs/workbench/browser/parts/dialogs/dialog.web.contribution.js').catch(e => {
-			console.error('[SideX] Barrel "web-dialog" failed:', e);
+			console.error('[Alkahest] Barrel "web-dialog" failed:', e);
 			throw e;
 		}),
 		import('./vs/workbench/workbench.web.main.js').catch(e => {
-			console.error('[SideX] Barrel "web-services" failed:', e);
+			console.error('[Alkahest] Barrel "web-services" failed:', e);
 			throw e;
 		})
 	]);
 
-	// SideX Rust bridge initialization — make services available before workbench creation
-	if ((globalThis as any).__SIDEX_TAURI__) {
+	// Alkahest Rust bridge initialization — make services available before workbench creation
+	if ((globalThis as any).__ALKAHEST_TAURI__) {
 		const {
-			SideXEditorBridge,
-			SideXSyntaxService,
-			SideXGitService,
-			SideXSearchService,
-			SideXSettingsService,
-			SideXThemeService,
-			SideXExtensionService,
-			SideXKeymapService,
-			SideXFileSystemProvider
-		} = await import('./vs/platform/sidex/common/sidexServices.js');
+			AlkahestEditorBridge,
+			AlkahestSyntaxService,
+			AlkahestGitService,
+			AlkahestSearchService,
+			AlkahestSettingsService,
+			AlkahestThemeService,
+			AlkahestExtensionService,
+			AlkahestKeymapService,
+			AlkahestFileSystemProvider
+		} = await import('./vs/platform/alkahest/common/alkahestServices.js');
 
-		(globalThis as any).__SIDEX_SERVICES__ = {
-			editor: SideXEditorBridge.getInstance(),
-			syntax: new SideXSyntaxService(),
-			git: new SideXGitService(),
-			search: new SideXSearchService(),
-			settings: new SideXSettingsService(),
-			theme: new SideXThemeService(),
-			extensions: new SideXExtensionService(),
-			keymap: new SideXKeymapService(),
-			fileSystem: new SideXFileSystemProvider()
+		(globalThis as any).__ALKAHEST_SERVICES__ = {
+			editor: AlkahestEditorBridge.getInstance(),
+			syntax: new AlkahestSyntaxService(),
+			git: new AlkahestGitService(),
+			search: new AlkahestSearchService(),
+			settings: new AlkahestSettingsService(),
+			theme: new AlkahestThemeService(),
+			extensions: new AlkahestExtensionService(),
+			keymap: new AlkahestKeymapService(),
+			fileSystem: new AlkahestFileSystemProvider()
 		};
 
-		console.log('[SideX] Rust bridge services initialized');
+		console.log('[Alkahest] Rust bridge services initialized');
 	}
 
 	const { create } = await import('./vs/workbench/browser/web.factory.js');
@@ -115,15 +115,15 @@ async function boot() {
 			}
 		},
 		windowIndicator: {
-			label: folderParam ? decodeURIComponent(folderParam.split('/').pop() || 'SideX') : 'SideX',
-			tooltip: 'SideX — Tauri Code Editor',
+			label: folderParam ? decodeURIComponent(folderParam.split('/').pop() || 'Alkahest') : 'Alkahest',
+			tooltip: 'Alkahest — Tauri Code Editor',
 			command: undefined
 		},
 		productConfiguration: {
-			nameShort: 'SideX',
-			nameLong: 'SideX',
-			applicationName: 'sidex',
-			dataFolderName: '.sidex',
+			nameShort: 'Alkahest',
+			nameLong: 'Alkahest',
+			applicationName: 'alkahest',
+			dataFolderName: '.alkahest',
 			version: '1.110.0',
 			linkProtectionTrustedDomains: ['https://github.com', 'https://*.github.com', 'https://*.githubusercontent.com']
 		},
@@ -220,7 +220,7 @@ async function boot() {
 	updateNativeMenuLabels();
 
 	console.log(
-		'[SideX] Workbench created' + (folderParam ? ` (folder: ${folderParam})` : ' (no folder)'),
+		'[Alkahest] Workbench created' + (folderParam ? ` (folder: ${folderParam})` : ' (no folder)'),
 		'workspace:',
 		workspace
 	);
@@ -229,7 +229,7 @@ async function boot() {
 function setupTauriExternalOpener() {
 	import('@tauri-apps/plugin-shell')
 		.then(shell => {
-			(window as any).__sidex_shellOpen = (url: string) => {
+			(window as any).__alkahest_shellOpen = (url: string) => {
 				shell.open(url).catch(() => {});
 			};
 		})
@@ -303,8 +303,8 @@ function setupWindowsEditorNewlineKeybindings() {
 		}
 
 		const commandService = (
-			window as { __sidex_commandService?: { executeCommand(commandId: string): Promise<unknown> } }
-		).__sidex_commandService;
+			window as { __alkahest_commandService?: { executeCommand(commandId: string): Promise<unknown> } }
+		).__alkahest_commandService;
 		if (!commandService) {
 			return;
 		}
@@ -314,7 +314,7 @@ function setupWindowsEditorNewlineKeybindings() {
 
 		const commandId = event.shiftKey ? 'editor.action.insertLineBefore' : 'editor.action.insertLineAfter';
 		commandService.executeCommand(commandId).catch(error => {
-			console.error(`[SideX] Failed to execute ${commandId}:`, error);
+			console.error(`[Alkahest] Failed to execute ${commandId}:`, error);
 		});
 	});
 }
@@ -384,17 +384,17 @@ function setupMenuActions() {
 		keyboard_shortcuts: 'workbench.action.keybindingsEditor'
 	};
 
-	(window as any).__sidex_menu_action = async (menuId: string) => {
+	(window as any).__alkahest_menu_action = async (menuId: string) => {
 		if (menuId === 'open_folder') {
-			sidexOpenFolder();
+			alkahestOpenFolder();
 			return;
 		}
 
 		if (menuId === 'find') {
-			const editorService = (window as any).__sidex_editorService;
+			const editorService = (window as any).__alkahest_editorService;
 			if (editorService?.activeEditor?.typeId === 'workbench.editors.webviewInput') {
 				try {
-					await (window as any).__sidex_commandService?.executeCommand('editor.action.webvieweditor.showFind');
+					await (window as any).__alkahest_commandService?.executeCommand('editor.action.webvieweditor.showFind');
 				} catch {}
 				return;
 			}
@@ -402,27 +402,27 @@ function setupMenuActions() {
 
 		const commandId = menuToCommand[menuId];
 		if (!commandId) {
-			console.warn(`[SideX] Unknown menu action: ${menuId}`);
+			console.warn(`[Alkahest] Unknown menu action: ${menuId}`);
 			return;
 		}
 		try {
-			const event = new CustomEvent('sidex-command', { detail: { commandId } });
+			const event = new CustomEvent('alkahest-command', { detail: { commandId } });
 			window.dispatchEvent(event);
 		} catch (e) {
-			console.error(`[SideX] Failed to execute menu command ${commandId}:`, e);
+			console.error(`[Alkahest] Failed to execute menu command ${commandId}:`, e);
 		}
 	};
 
 	// Native menu events arrive as CustomEvents from the Rust backend
-	window.addEventListener('sidex-native-menu', ((e: CustomEvent) => {
+	window.addEventListener('alkahest-native-menu', ((e: CustomEvent) => {
 		const menuId = e.detail;
-		if (typeof menuId === 'string' && (window as any).__sidex_menu_action) {
-			(window as any).__sidex_menu_action(menuId);
+		if (typeof menuId === 'string' && (window as any).__alkahest_menu_action) {
+			(window as any).__alkahest_menu_action(menuId);
 		}
 	}) as EventListener);
 
 	// Listen for command execution via keyboard shortcuts forwarded from native menu
-	window.addEventListener('sidex-command', async (e: any) => {
+	window.addEventListener('alkahest-command', async (e: any) => {
 		const commandId = e.detail?.commandId;
 		if (!commandId) {
 			return;
@@ -431,18 +431,18 @@ function setupMenuActions() {
 			commandId === 'workbench.action.files.openFolder' ||
 			commandId === 'workbench.action.files.openFolderViaWorkspace'
 		) {
-			sidexOpenFolder();
+			alkahestOpenFolder();
 			return;
 		}
 		try {
-			const commandService = (window as any).__sidex_commandService;
+			const commandService = (window as any).__alkahest_commandService;
 			if (commandService) {
 				await commandService.executeCommand(commandId);
 			} else {
-				console.warn(`[SideX] Command service not ready, queuing: ${commandId}`);
+				console.warn(`[Alkahest] Command service not ready, queuing: ${commandId}`);
 			}
 		} catch (err) {
-			console.error(`[SideX] Command ${commandId} failed:`, err);
+			console.error(`[Alkahest] Command ${commandId} failed:`, err);
 		}
 	});
 }
@@ -545,16 +545,16 @@ async function updateNativeMenuLabels() {
 		const { invoke } = await import('@tauri-apps/api/core');
 		await invoke('update_menu_labels', { labels });
 	} catch (e) {
-		console.warn('[SideX] Could not update native menu labels:', e);
+		console.warn('[Alkahest] Could not update native menu labels:', e);
 	}
 }
 
 boot().catch(err => {
-	console.error('[SideX] Fatal:', err);
+	console.error('[Alkahest] Fatal:', err);
 	const container = document.createElement('div');
 	container.style.cssText = 'padding:40px;color:#ccc;font-family:system-ui';
 	const h2 = document.createElement('h2');
-	h2.textContent = 'SideX failed to start';
+	h2.textContent = 'Alkahest failed to start';
 	const pre = document.createElement('pre');
 	pre.style.cssText = 'color:#f88;white-space:pre-wrap';
 	pre.textContent = (err as Error)?.stack || String(err);

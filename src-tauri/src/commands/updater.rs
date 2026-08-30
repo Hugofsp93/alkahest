@@ -1,17 +1,17 @@
 //! Tauri command bindings for the native update manager.
 //!
 //! The TypeScript `IUpdateService` on the frontend invokes these commands
-//! and listens to the `sidex://update/state-change` event to mirror
+//! and listens to the `alkahest://update/state-change` event to mirror
 //! `onStateChange`.
 
 use std::path::PathBuf;
 use std::sync::{Arc, OnceLock};
 
-use sidex_update::{State, UpdateConfig, UpdateManager, UpdateObserver, UpdateResult, UpdateType};
+use alkahest_update::{State, UpdateConfig, UpdateManager, UpdateObserver, UpdateResult, UpdateType};
 use tauri::{AppHandle, Emitter, Manager};
 
 /// Tauri event name carrying the latest [`State`] payload.
-pub const STATE_EVENT: &str = "sidex://update/state-change";
+pub const STATE_EVENT: &str = "alkahest://update/state-change";
 
 /// App-state wrapper so Tauri can hold a single [`UpdateManager`] instance.
 pub struct UpdateManagerState {
@@ -96,7 +96,7 @@ fn read_config(app: &AppHandle) -> UpdateConfig {
         cache_dir: cache_dir(app),
         update_type: default_update_type(),
         user_agent: format!(
-            "sidex/{} ({})",
+            "alkahest/{} ({})",
             app.package_info().version,
             std::env::consts::OS
         ),
@@ -179,7 +179,7 @@ pub async fn update_cleanup(state: tauri::State<'_, UpdateManagerState>) -> Resu
 #[allow(clippy::needless_pass_by_value)]
 pub fn update_quit_and_install(app: AppHandle) -> Result<(), String> {
     let install_root = std::env::current_exe().map_err(|e| e.to_string())?;
-    sidex_update::install::relaunch(&install_root).map_err(|e| e.to_string())?;
+    alkahest_update::install::relaunch(&install_root).map_err(|e| e.to_string())?;
     app.exit(0);
     Ok(())
 }

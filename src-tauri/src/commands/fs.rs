@@ -1,7 +1,7 @@
 use serde::Serialize;
 use std::path::Path;
 
-use sidex_workspace::file_ops as ws;
+use alkahest_workspace::file_ops as ws;
 
 use super::validation::validate_path;
 
@@ -28,7 +28,7 @@ pub struct FileStat {
     pub readonly: bool,
 }
 
-fn io_err(path: &str, e: &sidex_workspace::WorkspaceError) -> String {
+fn io_err(path: &str, e: &alkahest_workspace::WorkspaceError) -> String {
     format!("{path}: {e}")
 }
 

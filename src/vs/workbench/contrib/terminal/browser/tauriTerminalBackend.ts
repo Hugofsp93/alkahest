@@ -1,5 +1,5 @@
 /*---------------------------------------------------------------------------------------------
- *  Tauri Terminal Backend for SideX
+ *  Tauri Terminal Backend for Alkahest
  *  Bridges VSCode's terminal infrastructure to Tauri's PTY commands.
  *--------------------------------------------------------------------------------------------*/
 
@@ -52,7 +52,7 @@ async function ensureTauri(): Promise<boolean> {
 		_listen = events.listen as typeof _listen;
 		return true;
 	} catch (e) {
-		console.error('[SideX Terminal] Failed to load Tauri APIs:', e);
+		console.error('[Alkahest Terminal] Failed to load Tauri APIs:', e);
 		return false;
 	}
 }
@@ -119,7 +119,7 @@ class TauriPty extends Disposable implements ITerminalChildProcess {
 			}
 			envToPass['TERM'] = 'xterm-256color';
 			envToPass['COLORTERM'] = 'truecolor';
-			envToPass['TERM_PROGRAM'] = 'SideX';
+			envToPass['TERM_PROGRAM'] = 'Alkahest';
 			if (!envToPass['LANG']) {
 				envToPass['LANG'] = 'en_US.UTF-8';
 			}
@@ -186,7 +186,7 @@ class TauriPty extends Disposable implements ITerminalChildProcess {
 
 			return undefined;
 		} catch (e: any) {
-			console.error('[SideX Terminal] Failed to spawn:', e);
+			console.error('[Alkahest Terminal] Failed to spawn:', e);
 			return { message: e?.message || 'Failed to spawn terminal' };
 		}
 	}
@@ -508,7 +508,7 @@ export class TauriTerminalBackendContribution implements IWorkbenchContribution 
 		@ITerminalService terminalService: ITerminalService,
 		@IConfigurationService configurationService: IConfigurationService
 	) {
-		if (!(globalThis as any).__SIDEX_TAURI__) {
+		if (!(globalThis as any).__ALKAHEST_TAURI__) {
 			return;
 		}
 

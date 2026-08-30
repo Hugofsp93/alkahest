@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------------------------
- *  SideX: Stub for removed language configuration extension point.
+ *  Alkahest: Stub for removed language configuration extension point.
  *  This was part of the codeEditor contribution. The actual language config
- *  handling is done in sidex-editor.
+ *  handling is done in alkahest-editor.
  *--------------------------------------------------------------------------------------------*/
 
 export class LanguageConfigurationFileHandler {

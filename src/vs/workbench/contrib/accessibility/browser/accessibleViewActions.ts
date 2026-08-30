@@ -1,5 +1,5 @@
 /*---------------------------------------------------------------------------------------------
- *  SideX
+ *  Alkahest
  *  Minimal stubs for accessibility commands. The real VS Code implementations
  *  are `MultiCommand` instances exposing `addImplementation`, which is called
  *  by terminal / editor accessibility contributions during startup. Since our

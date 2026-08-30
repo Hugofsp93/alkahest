@@ -1011,8 +1011,8 @@ KeybindingsRegistry.registerCommandAndKeybindingRule({
 
 // --- Toggle Menu Bar
 
-const _sidexMacNative = (globalThis as any).__SIDEX_TAURI__ && isMacintosh;
-if ((isWindows || isLinux || isWeb) && !_sidexMacNative) {
+const _alkahestMacNative = (globalThis as any).__ALKAHEST_TAURI__ && isMacintosh;
+if ((isWindows || isLinux || isWeb) && !_alkahestMacNative) {
 	registerAction2(
 		class ToggleMenubarAction extends Action2 {
 			constructor() {
@@ -1730,7 +1730,7 @@ const MenuBarToggledContext = ContextKeyExpr.and(
 	ContextKeyExpr.notEquals(`config.${MenuSettings.MenuBarVisibility}`, 'compact')
 ) as ContextKeyExpression;
 const ToggleVisibilityActions: CustomizeLayoutItem[] = [];
-if ((!isMacintosh || !isNative) && !_sidexMacNative) {
+if ((!isMacintosh || !isNative) && !_alkahestMacNative) {
 	ToggleVisibilityActions.push(
 		CreateToggleLayoutItem(
 			'workbench.action.toggleMenuBar',
@@ -2064,7 +2064,7 @@ registerAction2(
 						resetSetting('workbench.statusBar.visible');
 						resetSetting('workbench.panel.defaultLocation');
 
-						if ((!isMacintosh || !isNative) && !_sidexMacNative) {
+						if ((!isMacintosh || !isNative) && !_alkahestMacNative) {
 							resetSetting('window.menuBarVisibility');
 						}
 

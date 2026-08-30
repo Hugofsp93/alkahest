@@ -1,12 +1,12 @@
 //! OS-keyring-backed secret storage commands.
 //!
 //! Feeds the TypeScript `ISecretStorageService`. Keys are namespaced
-//! automatically (the crate stores them under the `SideX` service id) so
+//! automatically (the crate stores them under the `Alkahest` service id) so
 //! collisions with other apps on the same keyring are impossible.
 
 use std::sync::Arc;
 
-use sidex_auth::SecretStorage;
+use alkahest_auth::SecretStorage;
 use tauri::{AppHandle, Manager};
 
 pub struct SecretsStore {

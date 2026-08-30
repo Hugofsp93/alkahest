@@ -1,5 +1,5 @@
 /*---------------------------------------------------------------------------------------------
- *  SideX: Stub for removed interactive editor input.
+ *  Alkahest: Stub for removed interactive editor input.
  *--------------------------------------------------------------------------------------------*/
 
 export class InteractiveEditorInput {

@@ -1,5 +1,5 @@
 /*---------------------------------------------------------------------------------------------
- *  SideX: Stub for removed custom text editor model.
+ *  Alkahest: Stub for removed custom text editor model.
  *--------------------------------------------------------------------------------------------*/
 
 export class CustomTextEditorModel {

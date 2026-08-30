@@ -262,7 +262,7 @@ fn spawn_host_process(
     )
     .map_err(|e| format!("failed to encode search paths: {e}"))?;
 
-    let init_data_file = std::env::temp_dir().join(format!("sidex-init-{}.json", &session_id));
+    let init_data_file = std::env::temp_dir().join(format!("alkahest-init-{}.json", &session_id));
     std::fs::write(&init_data_file, &init_data_json)
         .map_err(|e| format!("failed to write init data file: {e}"))?;
 
@@ -270,12 +270,12 @@ fn spawn_host_process(
     child_cmd
         .arg("--max-old-space-size=3072")
         .arg(&server_js)
-        .env("SIDEX_EXTENSIONS_DIR", &user_ext_dir)
-        .env("SIDEX_BUILTIN_EXTENSIONS_DIR", &builtin_ext_dir)
-        .env("SIDEX_GLOBAL_STORAGE_DIR", &global_store_dir)
-        .env("SIDEX_EXTENSION_SEARCH_PATHS", &search_paths_json)
-        .env("SIDEX_INIT_DATA_FILE", &init_data_file)
-        .env("SIDEX_SESSION_ID", &session_id)
+        .env("ALKAHEST_EXTENSIONS_DIR", &user_ext_dir)
+        .env("ALKAHEST_BUILTIN_EXTENSIONS_DIR", &builtin_ext_dir)
+        .env("ALKAHEST_GLOBAL_STORAGE_DIR", &global_store_dir)
+        .env("ALKAHEST_EXTENSION_SEARCH_PATHS", &search_paths_json)
+        .env("ALKAHEST_INIT_DATA_FILE", &init_data_file)
+        .env("ALKAHEST_SESSION_ID", &session_id)
         .env("NODE_ENV", "production")
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())

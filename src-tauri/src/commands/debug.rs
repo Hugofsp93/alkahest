@@ -254,14 +254,14 @@ pub fn debug_list_adapters(state: State<'_, Arc<DebugAdapterStore>>) -> Result<V
 }
 
 // ---------------------------------------------------------------------------
-// sidex-dap integration
+// alkahest-dap integration
 // ---------------------------------------------------------------------------
 
 #[derive(Debug, Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DapLaunchConfigResponse {
-    pub configs: Vec<sidex_dap::LaunchConfig>,
-    pub compounds: Vec<sidex_dap::CompoundLaunchConfig>,
+    pub configs: Vec<alkahest_dap::LaunchConfig>,
+    pub compounds: Vec<alkahest_dap::CompoundLaunchConfig>,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -286,7 +286,7 @@ pub fn dap_get_launch_configs(workspace: String) -> Result<DapLaunchConfigRespon
         });
     }
     let (configs, compounds) =
-        sidex_dap::parse_launch_json(&launch_path).map_err(|e| e.to_string())?;
+        alkahest_dap::parse_launch_json(&launch_path).map_err(|e| e.to_string())?;
     Ok(DapLaunchConfigResponse { configs, compounds })
 }
 
@@ -294,7 +294,7 @@ pub fn dap_get_launch_configs(workspace: String) -> Result<DapLaunchConfigRespon
 #[tauri::command]
 #[allow(clippy::unnecessary_wraps)]
 pub fn dap_get_adapter_registry() -> Result<Vec<DebugAdapterInfo>, String> {
-    let registry = sidex_dap::DebugAdapterRegistry::with_builtins();
+    let registry = alkahest_dap::DebugAdapterRegistry::with_builtins();
     let infos = registry
         .registered_types()
         .into_iter()
@@ -313,11 +313,11 @@ pub fn dap_get_adapter_registry() -> Result<Vec<DebugAdapterInfo>, String> {
 }
 
 // ---------------------------------------------------------------------------
-// High-level DAP client (sidex-dap DebugClient)
+// High-level DAP client (alkahest-dap DebugClient)
 // ---------------------------------------------------------------------------
 
 pub struct DapClientStore {
-    clients: AsyncMutex<HashMap<u32, Arc<sidex_dap::DebugClient>>>,
+    clients: AsyncMutex<HashMap<u32, Arc<alkahest_dap::DebugClient>>>,
     next_id: AsyncMutex<u32>,
 }
 
@@ -334,17 +334,17 @@ impl DapClientStore {
 #[serde(rename_all = "camelCase")]
 pub struct DapEventPayload {
     pub adapter_id: u32,
-    pub event: sidex_dap::DapEvent,
+    pub event: alkahest_dap::DapEvent,
 }
 
 #[derive(Debug, Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DapStartResult {
     pub adapter_id: u32,
-    pub capabilities: sidex_dap::Capabilities,
+    pub capabilities: alkahest_dap::Capabilities,
 }
 
-/// Launch a debug session via `sidex-dap`. Resolves `type_name` against the
+/// Launch a debug session via `alkahest-dap`. Resolves `type_name` against the
 /// built-in adapter registry, spawns the adapter, performs the initialize
 /// handshake, and sends the launch request.
 #[tauri::command]
@@ -352,14 +352,14 @@ pub async fn dap_start_adapter(
     app: AppHandle,
     state: State<'_, Arc<DapClientStore>>,
     type_name: String,
-    config: sidex_dap::LaunchConfig,
+    config: alkahest_dap::LaunchConfig,
 ) -> Result<DapStartResult, String> {
-    let registry = sidex_dap::DebugAdapterRegistry::with_builtins();
+    let registry = alkahest_dap::DebugAdapterRegistry::with_builtins();
     let command_line = registry
         .command_line(&type_name)
         .ok_or_else(|| format!("debug adapter type '{type_name}' is not registered"))?;
 
-    let client = sidex_dap::DebugClient::launch(&command_line, &config)
+    let client = alkahest_dap::DebugClient::launch(&command_line, &config)
         .await
         .map_err(|e| e.to_string())?;
 
@@ -509,7 +509,7 @@ pub async fn dap_send_request(
                 .and_then(|s| s.get("path"))
                 .and_then(serde_json::Value::as_str)
                 .ok_or("missing source.path")?;
-            let breakpoints: Vec<sidex_dap::SourceBreakpoint> = args
+            let breakpoints: Vec<alkahest_dap::SourceBreakpoint> = args
                 .get("breakpoints")
                 .cloned()
                 .map(serde_json::from_value)

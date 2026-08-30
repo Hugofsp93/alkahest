@@ -185,7 +185,7 @@ interface IFileTransferData {
 }
 
 async function extractFilesDropData(accessor: ServicesAccessor, event: DragEvent): Promise<IFileTransferData[]> {
-	// SideX: drag/drop of filesystem handles is not supported — we use the Tauri
+	// Alkahest: drag/drop of filesystem handles is not supported — we use the Tauri
 	// backend exclusively for file I/O. Extract any files via the standard FileList API.
 	const files = event.dataTransfer?.files;
 	if (!files) {

@@ -81,7 +81,7 @@ impl TsServerProcess {
     fn spawn(workspace_folders: &[String]) -> Option<Self> {
         let tsserver_path = Self::find_tsserver(workspace_folders)?;
 
-        let node_bin = std::env::var("SIDEX_NODE_BINARY").unwrap_or_else(|_| "node".to_string());
+        let node_bin = std::env::var("ALKAHEST_NODE_BINARY").unwrap_or_else(|_| "node".to_string());
 
         let mut cmd = Command::new(&node_bin);
         cmd.arg(&tsserver_path)
@@ -410,7 +410,7 @@ fn download_lsp_binary(server_name: &str, url_template: &str) -> Option<String> 
 
     let data_dir = dirs::data_local_dir()?;
     let server_dir = data_dir
-        .join("com.sidex.app")
+        .join("com.alkahest.app")
         .join("lsp-servers")
         .join(server_name);
     let bin_name = if cfg!(target_os = "windows") {
@@ -484,13 +484,13 @@ fn download_lsp_binary(server_name: &str, url_template: &str) -> Option<String> 
 #[allow(unsafe_code, clippy::all, unused)]
 mod wit_bindings {
     wasmtime::component::bindgen!({
-        world: "sidex-extension",
+        world: "alkahest-extension",
         path: "wit/world.wit",
     });
 }
 
-use wit_bindings::sidex::extension::common_types as wit_types;
-use wit_bindings::SidexExtension;
+use wit_bindings::alkahest::extension::common_types as wit_types;
+use wit_bindings::AlkahestExtension;
 
 // ---------------------------------------------------------------------------
 // Host state — the data accessible to WASM extensions via host imports
@@ -663,7 +663,7 @@ impl WasmHostState {
     }
 }
 
-impl wit_bindings::sidex::extension::host_api::Host for WasmHostState {
+impl wit_bindings::alkahest::extension::host_api::Host for WasmHostState {
     fn log_info(&mut self, message: String) {
         log::info!("[wasm-ext] {message}");
         self.log_buffer.push(format!("[info] {message}"));
@@ -817,10 +817,10 @@ impl wit_bindings::sidex::extension::host_api::Host for WasmHostState {
     fn register_command(&mut self, _id: String) {}
 
     fn execute_command(&mut self, id: String, args: String) -> Result<String, String> {
-        if id == "__sidex.tsserver" {
+        if id == "__alkahest.tsserver" {
             return self.execute_tsserver_command(&args);
         }
-        if id == "__sidex.lsp" {
+        if id == "__alkahest.lsp" {
             return self.execute_lsp_command(&args);
         }
         Err(format!("command not implemented: {id}"))
@@ -1426,7 +1426,7 @@ impl wit_bindings::sidex::extension::host_api::Host for WasmHostState {
     // ── Environment ──────────────────────────────────────────────────────────
 
     fn env_app_name(&mut self) -> String {
-        "SideX".to_string()
+        "Alkahest".to_string()
     }
     fn env_app_root(&mut self) -> String {
         std::env::current_exe()
@@ -1477,7 +1477,7 @@ impl wit_bindings::sidex::extension::host_api::Host for WasmHostState {
     fn get_extension_global_storage_path(&mut self) -> String {
         dirs::data_local_dir()
             .map(|d| {
-                d.join("sidex")
+                d.join("alkahest")
                     .join("global-storage")
                     .join(&self.extension_id)
                     .to_string_lossy()
@@ -1488,7 +1488,7 @@ impl wit_bindings::sidex::extension::host_api::Host for WasmHostState {
     fn get_extension_workspace_storage_path(&mut self) -> String {
         dirs::data_local_dir()
             .map(|d| {
-                d.join("sidex")
+                d.join("alkahest")
                     .join("workspace-storage")
                     .join(&self.extension_id)
                     .to_string_lossy()
@@ -1499,7 +1499,7 @@ impl wit_bindings::sidex::extension::host_api::Host for WasmHostState {
     fn get_extension_log_path(&mut self) -> String {
         dirs::data_local_dir()
             .map(|d| {
-                d.join("sidex")
+                d.join("alkahest")
                     .join("logs")
                     .join(&self.extension_id)
                     .to_string_lossy()
@@ -1705,10 +1705,10 @@ impl wit_bindings::sidex::extension::host_api::Host for WasmHostState {
     }
 }
 
-impl wit_bindings::sidex::extension::common_types::Host for WasmHostState {}
+impl wit_bindings::alkahest::extension::common_types::Host for WasmHostState {}
 
 // ---------------------------------------------------------------------------
-// tsserver dispatch — called from execute_command("__sidex.tsserver", ...)
+// tsserver dispatch — called from execute_command("__alkahest.tsserver", ...)
 // ---------------------------------------------------------------------------
 
 impl WasmHostState {
@@ -1772,7 +1772,7 @@ impl WasmHostState {
         self.tsserver_open_files.insert(file.to_string());
     }
 
-    /// Handle __sidex.lsp commands. Payload format:
+    /// Handle __alkahest.lsp commands. Payload format:
     /// {"server":"rust-analyzer","cmd":"rust-analyzer","args":[],"method":"textDocument/completion","params":{...}}
     #[allow(clippy::too_many_lines)]
     fn execute_lsp_command(&mut self, payload: &str) -> Result<String, String> {
@@ -2035,7 +2035,7 @@ struct LoadedWasmExtension {
     #[allow(dead_code)]
     id: String,
     store: Store<WasmHostState>,
-    bindings: SidexExtension,
+    bindings: AlkahestExtension,
 }
 
 // ---------------------------------------------------------------------------
@@ -2066,7 +2066,7 @@ impl WasmExtensionRuntime {
         wasmtime_wasi::p2::add_to_linker_sync(&mut linker)
             .map_err(|e| anyhow::anyhow!("add WASI to linker: {e}"))?;
 
-        SidexExtension::add_to_linker::<_, wasmtime::component::HasSelf<_>>(&mut linker, |x| x)
+        AlkahestExtension::add_to_linker::<_, wasmtime::component::HasSelf<_>>(&mut linker, |x| x)
             .map_err(|e| anyhow::anyhow!("add WIT bindings to linker: {e}"))?;
 
         Ok(Self {
@@ -2116,11 +2116,11 @@ impl WasmExtensionRuntime {
                 .clone_from(&guard.shared_workspace_folders);
         }
 
-        let bindings = SidexExtension::instantiate(&mut store, &component, &guard.linker)
+        let bindings = AlkahestExtension::instantiate(&mut store, &component, &guard.linker)
             .map_err(|e| format!("failed to instantiate {}: {e}", manifest.id))?;
 
         bindings
-            .sidex_extension_extension_api()
+            .alkahest_extension_extension_api()
             .call_activate(&mut store)
             .map_err(|e| format!("activate failed for {}: {e}", manifest.id))?
             .map_err(|e| format!("extension {} returned error: {e}", manifest.id))?;
@@ -2144,7 +2144,7 @@ impl WasmExtensionRuntime {
         if let Some(mut ext) = guard.extensions.remove(id) {
             let _ = ext
                 .bindings
-                .sidex_extension_extension_api()
+                .alkahest_extension_extension_api()
                 .call_deactivate(&mut ext.store);
             log::info!("unloaded WASM extension: {id}");
         }
@@ -2283,7 +2283,7 @@ pub async fn wasm_provide_completion(
 
     let result = ext
         .bindings
-        .sidex_extension_extension_api()
+        .alkahest_extension_extension_api()
         .call_provide_completion(&mut ext.store, &ctx, pos)
         .map_err(|e| format!("completion call failed: {e}"))?;
 
@@ -2323,7 +2323,7 @@ pub async fn wasm_provide_hover(
 
     let result = ext
         .bindings
-        .sidex_extension_extension_api()
+        .alkahest_extension_extension_api()
         .call_provide_hover(&mut ext.store, &ctx, pos)
         .map_err(|e| format!("hover call failed: {e}"))?;
 
@@ -2349,7 +2349,7 @@ pub async fn wasm_provide_definition(
 
     let result = ext
         .bindings
-        .sidex_extension_extension_api()
+        .alkahest_extension_extension_api()
         .call_provide_definition(&mut ext.store, &ctx, pos)
         .map_err(|e| format!("definition call failed: {e}"))?;
 
@@ -2372,7 +2372,7 @@ pub async fn wasm_provide_references(
 
     let result = ext
         .bindings
-        .sidex_extension_extension_api()
+        .alkahest_extension_extension_api()
         .call_provide_references(&mut ext.store, &ctx, pos)
         .map_err(|e| format!("references call failed: {e}"))?;
 
@@ -2394,7 +2394,7 @@ pub async fn wasm_provide_document_symbols(
 
     let result = ext
         .bindings
-        .sidex_extension_extension_api()
+        .alkahest_extension_extension_api()
         .call_provide_document_symbols(&mut ext.store, &ctx)
         .map_err(|e| format!("document symbols call failed: {e}"))?;
 
@@ -2429,7 +2429,7 @@ pub async fn wasm_provide_formatting(
 
     let result = ext
         .bindings
-        .sidex_extension_extension_api()
+        .alkahest_extension_extension_api()
         .call_provide_formatting(&mut ext.store, &ctx, tab_size, insert_spaces)
         .map_err(|e| format!("formatting call failed: {e}"))?;
 
@@ -2545,7 +2545,7 @@ pub async fn wasm_provide_completion_all(
         if let Some(ext) = guard.extensions.get_mut(ext_id) {
             match ext
                 .bindings
-                .sidex_extension_extension_api()
+                .alkahest_extension_extension_api()
                 .call_provide_completion(&mut ext.store, &ctx, pos)
             {
                 Ok(Some(cl)) => {
@@ -2600,7 +2600,7 @@ pub async fn wasm_provide_hover_all(
         if let Some(ext) = guard.extensions.get_mut(ext_id) {
             match ext
                 .bindings
-                .sidex_extension_extension_api()
+                .alkahest_extension_extension_api()
                 .call_provide_hover(&mut ext.store, &ctx, pos)
             {
                 Ok(Some(h)) if !h.contents.is_empty() => {
@@ -2639,7 +2639,7 @@ pub async fn wasm_provide_definition_all(
         if let Some(ext) = guard.extensions.get_mut(ext_id) {
             match ext
                 .bindings
-                .sidex_extension_extension_api()
+                .alkahest_extension_extension_api()
                 .call_provide_definition(&mut ext.store, &ctx, pos)
             {
                 Ok(locs) => {
@@ -2673,7 +2673,7 @@ pub async fn wasm_provide_document_symbols_all(
         if let Some(ext) = guard.extensions.get_mut(ext_id) {
             match ext
                 .bindings
-                .sidex_extension_extension_api()
+                .alkahest_extension_extension_api()
                 .call_provide_document_symbols(&mut ext.store, &ctx)
             {
                 Ok(symbols) => {
@@ -2714,7 +2714,7 @@ pub async fn wasm_provide_formatting_all(
         if let Some(ext) = guard.extensions.get_mut(ext_id) {
             match ext
                 .bindings
-                .sidex_extension_extension_api()
+                .alkahest_extension_extension_api()
                 .call_provide_formatting(&mut ext.store, &ctx, tab_size, insert_spaces)
             {
                 Ok(edits) if !edits.is_empty() => {
@@ -2754,7 +2754,7 @@ pub async fn wasm_on_document_opened(
     for ext in guard.extensions.values_mut() {
         let _ = ext
             .bindings
-            .sidex_extension_extension_api()
+            .alkahest_extension_extension_api()
             .call_on_document_opened(&mut ext.store, &ctx);
     }
     Ok(())
@@ -2772,7 +2772,7 @@ pub async fn wasm_on_document_closed(
     for ext in guard.extensions.values_mut() {
         let _ = ext
             .bindings
-            .sidex_extension_extension_api()
+            .alkahest_extension_extension_api()
             .call_on_document_closed(&mut ext.store, &ctx);
     }
     Ok(())
@@ -2791,7 +2791,7 @@ pub async fn wasm_on_document_saved(
     for ext in guard.extensions.values_mut() {
         let _ = ext
             .bindings
-            .sidex_extension_extension_api()
+            .alkahest_extension_extension_api()
             .call_on_document_saved(&mut ext.store, &ctx, reason);
     }
     Ok(())
@@ -2809,7 +2809,7 @@ pub async fn wasm_on_document_changed(
     for ext in guard.extensions.values_mut() {
         let _ = ext
             .bindings
-            .sidex_extension_extension_api()
+            .alkahest_extension_extension_api()
             .call_on_document_changed(&mut ext.store, &ctx, &[]);
     }
     Ok(())
@@ -2824,7 +2824,7 @@ pub async fn wasm_on_configuration_changed(
     for ext in guard.extensions.values_mut() {
         let _ = ext
             .bindings
-            .sidex_extension_extension_api()
+            .alkahest_extension_extension_api()
             .call_on_configuration_changed(&mut ext.store, &section);
     }
     Ok(())
@@ -2840,7 +2840,7 @@ pub async fn wasm_on_active_editor_changed(
             ext.store.data_mut().active_editor_uri.clone_from(&uri);
             let _ = ext
                 .bindings
-                .sidex_extension_extension_api()
+                .alkahest_extension_extension_api()
                 .call_on_active_editor_changed(&mut ext.store, uri.as_deref());
         }
     }
@@ -2869,7 +2869,7 @@ pub async fn wasm_provide_type_definition_all(
         if let Some(ext) = guard.extensions.get_mut(id) {
             if let Ok(locs) = ext
                 .bindings
-                .sidex_extension_extension_api()
+                .alkahest_extension_extension_api()
                 .call_provide_type_definition(&mut ext.store, &ctx, pos)
             {
                 for l in &locs {
@@ -2899,7 +2899,7 @@ pub async fn wasm_provide_implementation_all(
         if let Some(ext) = guard.extensions.get_mut(id) {
             if let Ok(locs) = ext
                 .bindings
-                .sidex_extension_extension_api()
+                .alkahest_extension_extension_api()
                 .call_provide_implementation(&mut ext.store, &ctx, pos)
             {
                 for l in &locs {
@@ -2929,7 +2929,7 @@ pub async fn wasm_provide_declaration_all(
         if let Some(ext) = guard.extensions.get_mut(id) {
             if let Ok(locs) = ext
                 .bindings
-                .sidex_extension_extension_api()
+                .alkahest_extension_extension_api()
                 .call_provide_declaration(&mut ext.store, &ctx, pos)
             {
                 for l in &locs {
@@ -2965,7 +2965,7 @@ pub async fn wasm_provide_code_actions_all(
         if let Some(ext) = guard.extensions.get_mut(id) {
             if let Ok(actions) = ext
                 .bindings
-                .sidex_extension_extension_api()
+                .alkahest_extension_extension_api()
                 .call_provide_code_actions(&mut ext.store, &ctx, range, &[])
             {
                 for a in &actions {
@@ -2996,7 +2996,7 @@ pub async fn wasm_provide_code_lenses_all(
         if let Some(ext) = guard.extensions.get_mut(id) {
             if let Ok(lenses) = ext
                 .bindings
-                .sidex_extension_extension_api()
+                .alkahest_extension_extension_api()
                 .call_provide_code_lenses(&mut ext.store, &ctx)
             {
                 for l in &lenses {
@@ -3028,7 +3028,7 @@ pub async fn wasm_provide_signature_help_all(
         if let Some(ext) = guard.extensions.get_mut(id) {
             if let Ok(Some(sh)) = ext
                 .bindings
-                .sidex_extension_extension_api()
+                .alkahest_extension_extension_api()
                 .call_provide_signature_help(&mut ext.store, &ctx, pos)
             {
                 return Ok(Some(serde_json::json!({
@@ -3064,7 +3064,7 @@ pub async fn wasm_provide_document_highlights_all(
         if let Some(ext) = guard.extensions.get_mut(id) {
             if let Ok(highlights) = ext
                 .bindings
-                .sidex_extension_extension_api()
+                .alkahest_extension_extension_api()
                 .call_provide_document_highlights(&mut ext.store, &ctx, pos)
             {
                 for h in &highlights {
@@ -3096,7 +3096,7 @@ pub async fn wasm_provide_rename_all(
         if let Some(ext) = guard.extensions.get_mut(id) {
             if let Ok(Some(r)) = ext
                 .bindings
-                .sidex_extension_extension_api()
+                .alkahest_extension_extension_api()
                 .call_provide_rename(&mut ext.store, &ctx, pos, &new_name)
             {
                 return Ok(Some(serde_json::json!({
@@ -3126,7 +3126,7 @@ pub async fn wasm_provide_folding_ranges_all(
         if let Some(ext) = guard.extensions.get_mut(id) {
             if let Ok(ranges) = ext
                 .bindings
-                .sidex_extension_extension_api()
+                .alkahest_extension_extension_api()
                 .call_provide_folding_ranges(&mut ext.store, &ctx)
             {
                 for r in &ranges {
@@ -3162,7 +3162,7 @@ pub async fn wasm_provide_inlay_hints_all(
         if let Some(ext) = guard.extensions.get_mut(id) {
             if let Ok(hints) = ext
                 .bindings
-                .sidex_extension_extension_api()
+                .alkahest_extension_extension_api()
                 .call_provide_inlay_hints(&mut ext.store, &ctx, range)
             {
                 for h in &hints {
@@ -3195,7 +3195,7 @@ pub async fn wasm_provide_document_links_all(
         if let Some(ext) = guard.extensions.get_mut(id) {
             if let Ok(links) = ext
                 .bindings
-                .sidex_extension_extension_api()
+                .alkahest_extension_extension_api()
                 .call_provide_document_links(&mut ext.store, &ctx)
             {
                 for l in &links {
@@ -3227,7 +3227,7 @@ pub async fn wasm_provide_selection_ranges_all(
         if let Some(ext) = guard.extensions.get_mut(id) {
             if let Ok(ranges) = ext
                 .bindings
-                .sidex_extension_extension_api()
+                .alkahest_extension_extension_api()
                 .call_provide_selection_ranges(&mut ext.store, &ctx, &wit_positions)
             {
                 for r in &ranges {
@@ -3253,7 +3253,7 @@ pub async fn wasm_provide_semantic_tokens_all(
         if let Some(ext) = guard.extensions.get_mut(id) {
             if let Ok(Some(tokens)) = ext
                 .bindings
-                .sidex_extension_extension_api()
+                .alkahest_extension_extension_api()
                 .call_provide_semantic_tokens(&mut ext.store, &ctx)
             {
                 return Ok(Some(
@@ -3280,7 +3280,7 @@ pub async fn wasm_provide_document_colors_all(
         if let Some(ext) = guard.extensions.get_mut(id) {
             if let Ok(colors) = ext
                 .bindings
-                .sidex_extension_extension_api()
+                .alkahest_extension_extension_api()
                 .call_provide_document_colors(&mut ext.store, &ctx)
             {
                 for c in &colors {
@@ -3307,7 +3307,7 @@ pub async fn wasm_provide_workspace_symbols_all(
         if let Some(ext) = guard.extensions.get_mut(id) {
             if let Ok(symbols) = ext
                 .bindings
-                .sidex_extension_extension_api()
+                .alkahest_extension_extension_api()
                 .call_provide_workspace_symbols(&mut ext.store, &query)
             {
                 for s in &symbols {
@@ -3350,7 +3350,7 @@ pub async fn wasm_provide_range_formatting_all(
         if let Some(ext) = guard.extensions.get_mut(id) {
             if let Ok(edits) = ext
                 .bindings
-                .sidex_extension_extension_api()
+                .alkahest_extension_extension_api()
                 .call_provide_range_formatting(&mut ext.store, &ctx, range, tab_size, insert_spaces)
             {
                 if !edits.is_empty() {
@@ -3383,7 +3383,7 @@ pub async fn wasm_execute_command_all(
         if let Some(ext) = guard.extensions.get_mut(id) {
             match ext
                 .bindings
-                .sidex_extension_extension_api()
+                .alkahest_extension_extension_api()
                 .call_execute_command(&mut ext.store, &command_id, &args)
             {
                 Ok(Ok(result)) => {
@@ -3407,7 +3407,7 @@ pub async fn wasm_get_extension_metadata(
         .extensions
         .get_mut(&extension_id)
         .ok_or_else(|| format!("extension not loaded: {extension_id}"))?;
-    let api = ext.bindings.sidex_extension_extension_api();
+    let api = ext.bindings.alkahest_extension_extension_api();
     let name = api.call_get_name(&mut ext.store).unwrap_or_default();
     let display_name = api
         .call_get_display_name(&mut ext.store)

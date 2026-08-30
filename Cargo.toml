@@ -1,27 +1,27 @@
 [workspace]
 resolver = "2"
 members = [
-  "crates/sidex-text",
-  "crates/sidex-syntax",
-  "crates/sidex-lsp",
-  "crates/sidex-workspace",
-  "crates/sidex-terminal",
-  "crates/sidex-git",
-  "crates/sidex-extensions",
-  "crates/sidex-extension-api",
-  "crates/sidex-theme",
-  "crates/sidex-keymap",
-  "crates/sidex-settings",
-  "crates/sidex-db",
-  "crates/sidex-remote",
-  "crates/sidex-dap",
-  "crates/sidex-tasks",
-  "crates/sidex-update",
-  "crates/sidex-profiles",
-  "crates/sidex-auth",
-  "crates/sidex-textmate",
+  "crates/alkahest-text",
+  "crates/alkahest-syntax",
+  "crates/alkahest-lsp",
+  "crates/alkahest-workspace",
+  "crates/alkahest-terminal",
+  "crates/alkahest-git",
+  "crates/alkahest-extensions",
+  "crates/alkahest-extension-api",
+  "crates/alkahest-theme",
+  "crates/alkahest-keymap",
+  "crates/alkahest-settings",
+  "crates/alkahest-db",
+  "crates/alkahest-remote",
+  "crates/alkahest-dap",
+  "crates/alkahest-tasks",
+  "crates/alkahest-update",
+  "crates/alkahest-profiles",
+  "crates/alkahest-auth",
+  "crates/alkahest-textmate",
   "src-tauri",
-  "sidex-extension-sdk",
+  "alkahest-extension-sdk",
 ]
 exclude = ["extensions-rust"]
 
@@ -30,30 +30,30 @@ version = "0.2.0"
 edition = "2021"
 rust-version = "1.91.0"
 license = "MIT"
-repository = "https://github.com/sidenai/sidex"
+repository = "https://github.com/Hugofsp93/alkahest"
 
 [workspace.dependencies]
 # Internal crates
-sidex-text = { path = "crates/sidex-text" }
-sidex-syntax = { path = "crates/sidex-syntax" }
-sidex-lsp = { path = "crates/sidex-lsp" }
-sidex-workspace = { path = "crates/sidex-workspace" }
-sidex-terminal = { path = "crates/sidex-terminal" }
-sidex-git = { path = "crates/sidex-git" }
-sidex-extensions = { path = "crates/sidex-extensions" }
-sidex-extension-api = { path = "crates/sidex-extension-api" }
-sidex-theme = { path = "crates/sidex-theme" }
-sidex-keymap = { path = "crates/sidex-keymap" }
-sidex-settings = { path = "crates/sidex-settings" }
-sidex-db = { path = "crates/sidex-db" }
-sidex-remote = { path = "crates/sidex-remote" }
-sidex-extension-sdk = { path = "sidex-extension-sdk" }
-sidex-tasks = { path = "crates/sidex-tasks" }
-sidex-dap = { path = "crates/sidex-dap" }
-sidex-update = { path = "crates/sidex-update" }
-sidex-profiles = { path = "crates/sidex-profiles" }
-sidex-auth = { path = "crates/sidex-auth" }
-sidex-textmate = { path = "crates/sidex-textmate" }
+alkahest-text = { path = "crates/alkahest-text" }
+alkahest-syntax = { path = "crates/alkahest-syntax" }
+alkahest-lsp = { path = "crates/alkahest-lsp" }
+alkahest-workspace = { path = "crates/alkahest-workspace" }
+alkahest-terminal = { path = "crates/alkahest-terminal" }
+alkahest-git = { path = "crates/alkahest-git" }
+alkahest-extensions = { path = "crates/alkahest-extensions" }
+alkahest-extension-api = { path = "crates/alkahest-extension-api" }
+alkahest-theme = { path = "crates/alkahest-theme" }
+alkahest-keymap = { path = "crates/alkahest-keymap" }
+alkahest-settings = { path = "crates/alkahest-settings" }
+alkahest-db = { path = "crates/alkahest-db" }
+alkahest-remote = { path = "crates/alkahest-remote" }
+alkahest-extension-sdk = { path = "alkahest-extension-sdk" }
+alkahest-tasks = { path = "crates/alkahest-tasks" }
+alkahest-dap = { path = "crates/alkahest-dap" }
+alkahest-update = { path = "crates/alkahest-update" }
+alkahest-profiles = { path = "crates/alkahest-profiles" }
+alkahest-auth = { path = "crates/alkahest-auth" }
+alkahest-textmate = { path = "crates/alkahest-textmate" }
 
 # Core
 tokio = { version = "1", features = ["full"] }

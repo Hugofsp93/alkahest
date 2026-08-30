@@ -1,13 +1,13 @@
 use crate::commands::extension_platform::{read_extension_manifest, ExtensionManifest};
 use serde::Serialize;
-use sidex_extensions::contributions::{parse_contributions, ContributionPoint};
-use sidex_extensions::installer::{
+use alkahest_extensions::contributions::{parse_contributions, ContributionPoint};
+use alkahest_extensions::installer::{
     install_from_vsix as crate_install_from_vsix, uninstall as crate_uninstall,
 };
-use sidex_extensions::manifest::sanitize_ext_id;
-use sidex_extensions::marketplace::MarketplaceClient;
-use sidex_extensions::paths::user_extensions_dir;
-use sidex_extensions::vsix::{install_package, unpack_vsix, validate_vsix};
+use alkahest_extensions::manifest::sanitize_ext_id;
+use alkahest_extensions::marketplace::MarketplaceClient;
+use alkahest_extensions::paths::user_extensions_dir;
+use alkahest_extensions::vsix::{install_package, unpack_vsix, validate_vsix};
 use std::fs;
 use std::path::Path;
 use std::sync::Arc;
@@ -45,7 +45,7 @@ pub struct InstalledExtension {
 }
 
 fn to_installed(
-    manifest: &sidex_extensions::manifest::ExtensionManifest,
+    manifest: &alkahest_extensions::manifest::ExtensionManifest,
     path: &Path,
 ) -> InstalledExtension {
     InstalledExtension {
@@ -88,7 +88,7 @@ pub async fn install_extension_from_url(url: String) -> Result<InstalledExtensio
     }
     let bytes = resp.bytes().await.map_err(|e| format!("read body: {e}"))?;
 
-    let tmp_path = std::env::temp_dir().join(format!("sidex-{}.vsix", uuid::Uuid::new_v4()));
+    let tmp_path = std::env::temp_dir().join(format!("alkahest-{}.vsix", uuid::Uuid::new_v4()));
     fs::write(&tmp_path, &bytes).map_err(|e| format!("write tempfile: {e}"))?;
 
     let result = (|| -> Result<InstalledExtension, String> {
