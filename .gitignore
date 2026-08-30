@@ -61,7 +61,6 @@ graphify-out/
 .env
 .env.*
 !.env.example
-/docs
 
 # ── Tauri generated ──────────────────────────────────────────────────────────
 src-tauri/gen/
